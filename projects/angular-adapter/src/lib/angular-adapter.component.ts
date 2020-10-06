@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 import FlatfileImporter, { FieldHookCallback } from '@flatfile/adapter';
 import CustomerObject from '@flatfile/adapter/build/main/obj.customer';
 import { IDataHookResponse } from '@flatfile/adapter/build/main/obj.validation-response';
 import FlatfileResults from '@flatfile/adapter/build/main/results';
+import { FlatFileImporterService } from './angular-adapter.service';
 
 import { IDictionary, ScalarDictionaryWithCustom } from './interfaces/general';
 import { ISettings } from './interfaces/settings';
@@ -11,46 +12,37 @@ import { ISettings } from './interfaces/settings';
 @Component({
   selector: 'flatfile-button',
   template: `
-    <!-- @todo pass down props -->
     <button (click)="launch()"></button>
   `,
-  styles: [
-  ]
+  styles: [],
+  providers: [FlatFileImporterService]
 })
-export class FlatfileButtonComponent implements OnInit {
+export class FlatfileButtonComponent implements OnInit, OnDestroy {
 
-  @Input()
-  settings: ISettings;
-  @Input()
-  licenseKey: string;
-  @Input()
-  customer: CustomerObject;
-  @Input()
-  fieldHooks?: IDictionary<FieldHookCallback>;
+  @Input() settings: ISettings;
+  @Input() licenseKey: string;
+  @Input() customer: CustomerObject;
+  @Input() fieldHooks?: IDictionary<FieldHookCallback>;
 
-  @Output()
-  cancel: () => void;
-  @Output()
-  data: (results: FlatfileResults) => Promise<string | void>;
-  @Output()
-  recordChange?: (
+  @Output() cancel: () => void;
+  @Output() data: (results: FlatfileResults) => Promise<string | void>;
+  @Output() recordChange?: (
     data: ScalarDictionaryWithCustom,
     index: number
   ) => IDataHookResponse | Promise<IDataHookResponse>;
-  @Output()
-  recordInit?: (
+  @Output() recordInit?: (
     data: ScalarDictionaryWithCustom,
     index: number
   ) => IDataHookResponse | Promise<IDataHookResponse>;
 
   private importer: FlatfileImporter;
 
+  constructor(
+    private flatFileImporterService: FlatFileImporterService
+  ) {}
+
   ngOnInit(): void {
-    const tempImporter = new FlatfileImporter(
-      this.licenseKey,
-      this.settings,
-      this.customer
-    );
+    const tempImporter = this.flatFileImporterService.importer;
 
     if (this.fieldHooks) {
       for (const key in this.fieldHooks) {
@@ -60,6 +52,7 @@ export class FlatfileButtonComponent implements OnInit {
       }
     }
     if (this.recordChange || this.recordInit) {
+      // @question What are these used for, can these be moved inside the FlatFileImporterService perhaps?
       // @ts-ignore
       tempImporter.registerRecordHook((record, index, eventType) => {
         if (eventType === 'init' && this.recordInit) {
@@ -71,6 +64,11 @@ export class FlatfileButtonComponent implements OnInit {
       });
     }
     this.importer = tempImporter;
+  }
+
+  ngOnDestroy(): void {
+    // @question Is there anything we need/should do when the component is being destroyed?
+    this.importer.close();
   }
 
   public launch(): void {

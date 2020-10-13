@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AngularAdapterComponent } from './angular-adapter.component';
+import { FlatfileButtonComponent } from './angular-adapter.component';
 
-describe('AngularAdapterComponent', () => {
-  let component: AngularAdapterComponent;
-  let fixture: ComponentFixture<AngularAdapterComponent>;
+describe('FlatfileButtonComponent', () => {
+  let component: FlatfileButtonComponent;
+  let fixture: ComponentFixture<FlatfileButtonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AngularAdapterComponent ]
+      declarations: [ FlatfileButtonComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AngularAdapterComponent);
+    fixture = TestBed.createComponent(FlatfileButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

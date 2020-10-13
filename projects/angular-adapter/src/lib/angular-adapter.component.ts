@@ -35,14 +35,12 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
     index: number
   ) => IDataHookResponse | Promise<IDataHookResponse>;
 
-  private importer: FlatfileImporter;
-
   constructor(
     private flatFileImporterService: FlatFileImporterService
   ) {}
 
   ngOnInit(): void {
-    const tempImporter = this.flatFileImporterService.importer;
+    const tempImporter = this.flatFileImporterService;
 
     if (this.fieldHooks) {
       for (const key in this.fieldHooks) {
@@ -63,23 +61,23 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
         }
       });
     }
-    this.importer = tempImporter;
+    this.flatFileImporterService = tempImporter;
   }
 
   ngOnDestroy(): void {
     // @question Is there anything we need/should do when the component is being destroyed?
-    this.importer.close();
+    this.flatFileImporterService.close();
   }
 
   public launch(): void {
     const dataHandler = (results: FlatfileResults) => {
-      this.importer?.displayLoader();
+      this.flatFileImporterService?.displayLoader();
       this.data?.(results).then(
         (optionalMessage?: string | void) => {
-          this.importer?.displaySuccess(optionalMessage || 'Success!');
+          this.flatFileImporterService?.displaySuccess(optionalMessage || 'Success!');
         },
         (error: any) =>
-          this.importer
+          this.flatFileImporterService
             ?.requestCorrectionsFromUser(
               error instanceof Error ? error.message : error
             )
@@ -87,10 +85,10 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
       );
     };
 
-    if (!this.importer) {
+    if (!this.flatFileImporterService) {
       return;
     }
-    this.importer.requestDataFromUser().then(dataHandler, () => this.cancel());
+    this.flatFileImporterService.requestDataFromUser().then(dataHandler, () => this.cancel());
   }
 
 }

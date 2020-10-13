@@ -12,7 +12,7 @@ import { AngularAdapterOptions } from './interfaces/angular-adapter-options';
   exports: [FlatfileButtonComponent],
 })
 export class FlatfileAngularAdapterModule {
-  forRoot(options: AngularAdapterOptions): ModuleWithProviders<FlatfileAngularAdapterModule> {
+  static forRoot(options: AngularAdapterOptions): ModuleWithProviders<FlatfileAngularAdapterModule> {
     return {
       ngModule: FlatfileAngularAdapterModule,
       providers: [

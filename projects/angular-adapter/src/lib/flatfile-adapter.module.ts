@@ -1,9 +1,9 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import FlatfileImporter from '@flatfile/adapter';
 
-import { FlatfileButtonComponent } from './angular-adapter.component';
-import { FlatFileImporterService } from './angular-adapter.service';
+import { FlatfileButtonComponent } from './flatfile-button.component';
 import { ANGULAR_ADAPTER_OPTIONS } from './constants/angular-adapter.constants';
+import { FLATFILE_IMPORTER } from './constants/flatfile-importer.constants';
 import { AngularAdapterOptions } from './interfaces/angular-adapter-options';
 
 @NgModule({
@@ -11,22 +11,26 @@ import { AngularAdapterOptions } from './interfaces/angular-adapter-options';
   imports: [],
   exports: [FlatfileButtonComponent],
 })
-export class FlatfileAngularAdapterModule {
-  static forRoot(options: AngularAdapterOptions): ModuleWithProviders<FlatfileAngularAdapterModule> {
+export class FlatfileAdapterModule {
+  static forRoot(options: AngularAdapterOptions): ModuleWithProviders<FlatfileAdapterModule> {
+    console.log('forRoot');
+    console.log({options});
     return {
-      ngModule: FlatfileAngularAdapterModule,
+      ngModule: FlatfileAdapterModule,
       providers: [
         {
           provide: ANGULAR_ADAPTER_OPTIONS,
           useValue: options,
         },
         {
-          provide: FlatFileImporterService,
+          provide: FLATFILE_IMPORTER,
           useFactory: (importerOptions: AngularAdapterOptions) => {
+            console.log('USE FACTORY')
+            console.log({importerOptions});
             return new FlatfileImporter(
-            importerOptions.licenseKey,
-            importerOptions.settings,
-            importerOptions.customer
+              importerOptions.licenseKey,
+              importerOptions.settings,
+              importerOptions.customer
             );
           },
           deps: [ANGULAR_ADAPTER_OPTIONS]

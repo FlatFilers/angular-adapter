@@ -1,6 +1,6 @@
 import { ScalarDictionaryWithCustom } from './general';
 
-export interface Record {
+export interface RowRecord {
   data: ScalarDictionaryWithCustom;
   index: number;
 }

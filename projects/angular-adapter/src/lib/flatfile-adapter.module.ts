@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import FlatfileImporter from '@flatfile/adapter';
 
@@ -8,13 +9,11 @@ import { AngularAdapterOptions } from './interfaces/angular-adapter-options';
 
 @NgModule({
   declarations: [FlatfileButtonComponent],
-  imports: [],
+  imports: [CommonModule],
   exports: [FlatfileButtonComponent],
 })
 export class FlatfileAdapterModule {
   static forRoot(options: AngularAdapterOptions): ModuleWithProviders<FlatfileAdapterModule> {
-    console.log('forRoot');
-    console.log({options});
     return {
       ngModule: FlatfileAdapterModule,
       providers: [
@@ -25,8 +24,6 @@ export class FlatfileAdapterModule {
         {
           provide: FLATFILE_IMPORTER,
           useFactory: (importerOptions: AngularAdapterOptions) => {
-            console.log('USE FACTORY')
-            console.log({importerOptions});
             return new FlatfileImporter(
               importerOptions.licenseKey,
               importerOptions.settings,

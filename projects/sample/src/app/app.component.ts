@@ -18,19 +18,15 @@ import { FieldHookCallback } from 'projects/angular-adapter/src/public-api';
       [(data)]="onData"
       [(recordInit)]="onRecordInit"
       [(recordChange)]="onRecordChange"
-      (cancel)="onCancel()"
-      >
-      Testing
+      (cancel)="onCancel()">
+      This text is coming from the end-user of this component
     </flatfile-button>
   `,
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements FlatfileMethods {
 
-  // @todo Add settings/customer/licenseKey here as Input()'s
-
   customer = { userId: '12345' };
-  // licenseKey: 'aa921983-4db2-4da1-a580-fbca0b1c75b2',
   licenseKey = '4171f0b4-5f5c-4b32-a008-356ebb813e4e';
   settings = {
     type: 'test import',
@@ -60,10 +56,10 @@ export class AppComponent implements FlatfileMethods {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (errorState) {
-          reject('rejected');
+          reject('rejected - this text is controlled by the end-user');
           errorState = false;
         } else {
-          resolve('message');
+          resolve('Flatfile upload successful - this text is controlled by the end-user');
         }
       }, 3000);
     });
@@ -72,8 +68,8 @@ export class AppComponent implements FlatfileMethods {
   onRecordInit(record: ScalarDictionaryWithCustom, index: number): IDataHookResponse | Promise<IDataHookResponse> {
     return {
       email: {
-        value: record.email + "@",
-        info: [{ message: "added @ on init", level: "info" }]
+        value: record.email + '@',
+        info: [{ message: 'added @ on init', level: 'info' }]
       }
     };
   }
@@ -81,8 +77,8 @@ export class AppComponent implements FlatfileMethods {
   onRecordChange(record: ScalarDictionaryWithCustom, index: number): IDataHookResponse | Promise<IDataHookResponse> {
     return {
       email: {
-        value: record.email + "#",
-        info: [{ message: "added # on change", level: "warning" }]
+        value: record.email + '#',
+        info: [{ message: 'added # on change', level: 'warning' }]
       }
     };
   }

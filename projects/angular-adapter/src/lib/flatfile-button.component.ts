@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 
 import FlatfileImporter, { FieldHookCallback } from '@flatfile/adapter';
 import CustomerObject from '@flatfile/adapter/build/main/obj.customer';
@@ -12,17 +12,21 @@ import { ISettings } from './interfaces/settings';
 @Component({
   selector: 'flatfile-button',
   template: `
-    <button *ngIf="!failedLoadingImporter; failedLoading" (click)="launch()">
-      🔼 Upload with Flatfile
+    <button *ngIf="importerLoaded; else failedLoading" (click)="launch()">
+      <ng-content #ref></ng-content>
+      <span *ngIf="ref && !ref.innerHTML.trim()">🔼 Upload with Flatfile</span>
     </button>
+
     <ng-template #failedLoading>
       Failed to load importer
     </ng-template>
   `,
-  styles: [],
+  styles: [``],
   providers: []
 })
 export class FlatfileButtonComponent implements OnInit, OnDestroy {
+
+  @ViewChild('ref', { static: true }) ref: HTMLElement;
 
   @Input() settings: ISettings;
   @Input() licenseKey: string;
@@ -46,18 +50,18 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
   ) => IDataHookResponse | Promise<IDataHookResponse>;
   @Output() recordChangeChange = new EventEmitter<RowRecord>();
 
-  public failedLoadingImporter = false;
+  public importerLoaded = true;
 
   private flatfileImporter: FlatfileImporter;
 
   constructor() {}
 
   ngOnInit(): void {
+    this.validateInputs();
+
     const tempImporter = new FlatfileImporter(this.licenseKey, this.settings, this.customer);
 
     if (this.fieldHooks) {
-      // console.log('\n\n > fieldHooks < ');
-      // console.log(this.fieldHooks);
       for (const key in this.fieldHooks) {
         if (key) {
           tempImporter.registerFieldHook(key, this.fieldHooks[key]);
@@ -66,19 +70,11 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
     }
     if (this.recordChange || this.recordInit) {
       tempImporter.registerRecordHook((record, index, eventType) => {
-        // console.log('registerRecordHook');
-        // console.log(record, index, eventType);
         if (eventType === 'init' && this.recordInit) {
-          console.log({ data: record, index });
           this.recordInitChange.next({ data: record, index });
-          console.log(this.recordInit);
-          return this.recordInit;
         }
         if (eventType === 'change' && this.recordChange) {
-          console.log({ data: record, index });
           this.recordChangeChange.next({ data: record, index });
-          console.log(this.recordChange);
-          return this.recordChange;
         }
       });
     }
@@ -86,7 +82,6 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // @question Is there anything we need/should do when the component is being destroyed?
     this.flatfileImporter.close();
   }
 
@@ -113,10 +108,21 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
     };
 
     if (!this.flatfileImporter) {
-      this.failedLoadingImporter = true;
+      this.importerLoaded = false;
       return;
     }
     this.flatfileImporter.requestDataFromUser().then(dataHandler, () => this.cancel.next());
+  }
+
+  private validateInputs(): void {
+    if (!this.licenseKey) {
+      console.error('[Error] Flatfile Angular Adapter - licenseKey not provided!');
+      this.importerLoaded = false;
+    }
+    if (!this.customer?.userId) {
+      console.error('[Error] Flatfile Angular Adapter - customer userId not provided!');
+      this.importerLoaded = false;
+    }
   }
 
 }

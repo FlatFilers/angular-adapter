@@ -1,3 +1,5 @@
+import { IDataHookResponse } from '@flatfile/adapter/build/main/obj.validation-response';
+
 export type ScalarDictionary = IDictionary<Nullable<IPrimitive>>;
 export type IPrimitiveDictionary = IDictionary<IPrimitive>;
 
@@ -20,3 +22,8 @@ type IWarningLevel = 'error' | 'warning' | 'info';
 
 export type IPrimitive = string | number | boolean;
 export type Nullable<T> = T | undefined | null;
+
+export type RecordInitOrChangeCallback = (
+  data: ScalarDictionaryWithCustom,
+  index: number
+) => IDataHookResponse | Promise<IDataHookResponse>;

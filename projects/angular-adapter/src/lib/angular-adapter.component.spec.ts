@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { FlatfileButtonComponent } from './flatfile-button.component';
 
 describe('FlatfileButtonComponent', () => {

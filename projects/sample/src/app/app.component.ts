@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { IDataHookResponse } from '@flatfile/adapter/build/main/obj.validation-response';
 import FlatfileResults from '@flatfile/adapter/build/main/results';
-import { FlatfileMethods } from 'projects/angular-adapter/src/lib/interfaces/angular-adapter.config';
-import { ScalarDictionaryWithCustom } from 'projects/angular-adapter/src/lib/interfaces/general';
-import { FieldHookCallback } from 'projects/angular-adapter/src/public-api';
+import { FieldHookCallback, FlatfileMethods, ScalarDictionaryWithCustom } from 'projects/angular-adapter/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +23,6 @@ import { FieldHookCallback } from 'projects/angular-adapter/src/public-api';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements FlatfileMethods {
-
   customer = { userId: '12345' };
   licenseKey = '4171f0b4-5f5c-4b32-a008-356ebb813e4e';
   settings = {

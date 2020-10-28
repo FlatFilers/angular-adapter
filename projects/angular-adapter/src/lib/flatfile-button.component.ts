@@ -1,31 +1,25 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-
 import FlatfileImporter, { FieldHookCallback } from '@flatfile/adapter';
 import CustomerObject from '@flatfile/adapter/build/main/obj.customer';
-import { IDataHookResponse } from '@flatfile/adapter/build/main/obj.validation-response';
 import FlatfileResults from '@flatfile/adapter/build/main/results';
-
-import { ScalarDictionaryWithCustom } from './interfaces/general';
+import { RecordInitOrChangeCallback } from './interfaces/general';
 import { RowRecord } from './interfaces/row-record.interface';
 import { ISettings } from './interfaces/settings';
 
 @Component({
   selector: 'flatfile-button',
   template: `
-    <button *ngIf="importerLoaded; else failedLoading" (click)="launch()">
+    <button *ngIf="isImporterLoaded; else failedLoading" (click)="launch()">
       <ng-content #ref></ng-content>
-      <span *ngIf="ref && !ref.innerHTML.trim()">🔼 Upload with Flatfile</span>
+      <span *ngIf="isButtonPresent">🔼 Upload with Flatfile</span>
     </button>
 
     <ng-template #failedLoading>
       Failed to load importer
     </ng-template>
   `,
-  styles: [``],
-  providers: []
 })
 export class FlatfileButtonComponent implements OnInit, OnDestroy {
-
   @ViewChild('ref', { static: true }) ref: HTMLElement;
 
   @Input() settings: ISettings;
@@ -38,38 +32,37 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
   @Input() data: (results: FlatfileResults) => Promise<string | void>;
   @Output() dataChange = new EventEmitter<any>();
 
-  @Input() recordInit: (
-    data: ScalarDictionaryWithCustom,
-    index: number
-  ) => IDataHookResponse | Promise<IDataHookResponse>;
+  @Input() recordInit: RecordInitOrChangeCallback;
   @Output() recordInitChange = new EventEmitter<RowRecord>();
 
-  @Input() recordChange?: (
-    data: ScalarDictionaryWithCustom,
-    index: number
-  ) => IDataHookResponse | Promise<IDataHookResponse>;
+  @Input() recordChange?: RecordInitOrChangeCallback;
   @Output() recordChangeChange = new EventEmitter<RowRecord>();
 
-  public importerLoaded = true;
-
+  private _isImporterLoaded = true;
   private flatfileImporter: FlatfileImporter;
 
-  constructor() {}
+  get isImporterLoaded() {
+    return this._isImporterLoaded;
+  }
 
-  ngOnInit(): void {
+  get isButtonPresent() {
+    return this.ref && !this.ref.innerHTML.trim();
+  }
+  
+  public ngOnInit(): void {
     this.validateInputs();
 
-    const tempImporter = new FlatfileImporter(this.licenseKey, this.settings, this.customer);
+    this.flatfileImporter = new FlatfileImporter(this.licenseKey, this.settings, this.customer);
 
     if (this.fieldHooks) {
       for (const key in this.fieldHooks) {
         if (key) {
-          tempImporter.registerFieldHook(key, this.fieldHooks[key]);
+          this.flatfileImporter.registerFieldHook(key, this.fieldHooks[key]);
         }
       }
     }
     if (this.recordChange || this.recordInit) {
-      tempImporter.registerRecordHook((record, index, eventType) => {
+      this.flatfileImporter.registerRecordHook((record: any, index: number, eventType: string) => {
         if (eventType === 'init' && this.recordInit) {
           this.recordInitChange.next({ data: record, index });
         }
@@ -78,20 +71,15 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
         }
       });
     }
-    this.flatfileImporter = tempImporter;
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.flatfileImporter.close();
   }
 
   public launch(): void {
     const dataHandler = async (results: FlatfileResults) => {
       this.flatfileImporter?.displayLoader();
-
-      console.log('inside dataHandler');
-      console.log({results});
-
       this.dataChange.next(results);
 
       this.data?.(results).then(
@@ -108,7 +96,7 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
     };
 
     if (!this.flatfileImporter) {
-      this.importerLoaded = false;
+      this._isImporterLoaded = false;
       return;
     }
     this.flatfileImporter.requestDataFromUser().then(dataHandler, () => this.cancel.next());
@@ -117,12 +105,11 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
   private validateInputs(): void {
     if (!this.licenseKey) {
       console.error('[Error] Flatfile Angular Adapter - licenseKey not provided!');
-      this.importerLoaded = false;
+      this._isImporterLoaded = false;
     }
     if (!this.customer?.userId) {
       console.error('[Error] Flatfile Angular Adapter - customer userId not provided!');
-      this.importerLoaded = false;
+      this._isImporterLoaded = false;
     }
   }
-
 }

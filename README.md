@@ -1,10 +1,9 @@
-# [WIP] The Flatfile Component - @flatfile/angular
+# Flatfile Angular Component - @flatfile/angular
 
 We've made it really simple for you to get started with Flatfile with our new Flatfile Component. Here's what you'll need to know to get started.
 
 First, install the dependency via npm:
 
-[ WIP ] 
 `npm install @flatfile/angular`
 
 This will give you access to the `<flatfile-button />` component as well as the same basic functionality as our Adapter.
@@ -121,3 +120,25 @@ imports: [
 |`render`- An optional way to pass in your own elements to render inside the FlatfileButton Component.|Optional. <br />function |`render={`<br />`(`[`FlatfileImporter`](https://developers.flatfile.io/docs/sdk/classes/flatfileimporter)`, `[`launch`](https://github.com/FlatFilers/react-adapter/blob/master/src/components/FlatFileButton.tsx#L83)`) => return ReactElement}`|
 
 Try our example in [CodesandBox](https://codesandbox.io/s/react-flatfile-component-5l4le).
+
+### Running the sample application
+
+```bash
+npm i && npm start
+```
+
+The same application will be fired up at `http://localhost:4200`.
+
+> Ensure that you've entered in a valid licenseKey in the `AppComponent` file (`projects/sample/app.component.ts`).
+
+### Publishing
+
+Ensure that the correct semantic version has been updated in the `projects/angular-adapter/package.json` version.
+
+Then run:
+
+```bash
+npm run build:prod
+cd dist/angular-adapter
+npm publish
+```

@@ -11,11 +11,11 @@ This will give you access to the `<flatfile-button />` component as well as the 
 ## The flatfile-button usage
 
 ```ts
-import { FlatfileAngularAdapterModule } from '@flatfile/angular';
+import { FlatfileAdapterModule } from '@flatfile/angular';
 
 // Add to your Modules imports: []
 imports: [
-  FlatfileAngularAdapterModule
+  FlatfileAdapterModule
 ]
 ```
 

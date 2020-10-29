@@ -7,7 +7,6 @@
     "type": "git",
     "url": "https://github.com/FlatFilers/angular-adapter.git"
   },
-  "author": "Mark Pieszak",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/FlatFilers/angular-adapter/issues"

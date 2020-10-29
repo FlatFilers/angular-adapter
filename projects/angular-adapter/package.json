@@ -13,10 +13,10 @@
   },
   "peerDependencies": {
     "@angular/common": "^10.1.2",
-    "@angular/core": "^10.1.2",
-    "@flatfile/adapter": "^2.0.0"
+    "@angular/core": "^10.1.2"
   },
   "dependencies": {
+    "@flatfile/adapter": "^2.0.0",
     "tslib": "^2.0.0"
   }
 }

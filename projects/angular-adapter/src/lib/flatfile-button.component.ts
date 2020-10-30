@@ -41,14 +41,14 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
   private _isImporterLoaded = true;
   private flatfileImporter: FlatfileImporter;
 
-  get isImporterLoaded() {
+  get isImporterLoaded(): boolean {
     return this._isImporterLoaded;
   }
 
-  get isButtonPresent() {
+  get isButtonPresent(): boolean {
     return this.ref && !this.ref.innerHTML.trim();
   }
-  
+
   public ngOnInit(): void {
     this.validateInputs();
 

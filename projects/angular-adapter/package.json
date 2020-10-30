@@ -11,6 +11,14 @@
   "bugs": {
     "url": "https://github.com/FlatFilers/angular-adapter/issues"
   },
+  "keywords": [
+    "flatfile",
+    "flatfile angular",
+    "angular",
+    "csv",
+    "angular csv",
+    "angular csv import"
+  ],
   "peerDependencies": {
     "@angular/common": "^10.1.2",
     "@angular/core": "^10.1.2"

@@ -8,7 +8,7 @@ First, install the dependency via npm:
 
 This will give you access to the `<flatfile-button />` component as well as the same basic functionality as our Adapter.
 
-## The flatfile-button usage
+## Getting Started with <flatfile-button>
 
 ```ts
 import { FlatfileAdapterModule } from '@flatfile/angular';

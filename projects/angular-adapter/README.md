@@ -39,7 +39,7 @@ imports: [
 }) export class MyDemoComponent {
   
   customer = { userId: '12345' };
-  licenseKey = '4171f0b4-5f5c-4b32-a008-356ebb813e4e';
+  licenseKey = 'LICENSE_KEY_HERE';
   settings = {
     type: 'test import',
     fields: [

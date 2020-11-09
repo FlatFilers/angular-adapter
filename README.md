@@ -29,9 +29,9 @@ imports: [
       [customer]="customer"
       [licenseKey]="licenseKey"
       [fieldHooks]="fieldHooks"
-      [(data)]="onData"
-      [(recordInit)]="onRecordInit"
-      [(recordChange)]="onRecordChange"
+      [onData]="onData.bind(this)"
+      [onRecordInit]="onRecordInit.bind(this)"
+      [onRecordChange]="onRecordChange.bind(this)"
       (cancel)="onCancel()">
       This text is coming from the end-user of this component
     </flatfile-button>
@@ -51,7 +51,7 @@ imports: [
   /*
    * @Input()'s
    */
-  public fieldHooks: Record<string, FieldHookCallback> = {
+  fieldHooks: Record<string, FieldHookCallback> = {
     email: (values) => {
       return values.map(([item, index]) => [
         { value: item + '@', info: [{message: 'added @ after the email', level: 'warning'}] },
@@ -60,19 +60,17 @@ imports: [
     }
   };
 
-  /*
-   * 2-way binding handlers
-   */
   onData(results: FlatfileResults): Promise<string> {
     let errorState = false;
+
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (errorState) {
-          reject('rejected - this text is controlled by the end-user');
-          errorState = false;
-        } else {
-          resolve('Flatfile upload successful - this text is controlled by the end-user');
-        }
+            reject('rejected - this text is controlled by the end-user');
+            errorState = false;
+          } else {
+            resolve('Flatfile upload successful - this text is controlled by the end-user');
+          }
       }, 3000);
     });
   }

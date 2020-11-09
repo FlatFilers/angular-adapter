@@ -29,14 +29,9 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
 
   @Output() cancel = new EventEmitter<void>();
 
-  @Input() data: (results: FlatfileResults) => Promise<string | void>;
-  @Output() dataChange = new EventEmitter<any>();
-
-  @Input() recordInit: RecordInitOrChangeCallback;
-  @Output() recordInitChange = new EventEmitter<RowRecord>();
-
-  @Input() recordChange?: RecordInitOrChangeCallback;
-  @Output() recordChangeChange = new EventEmitter<RowRecord>();
+  @Input() onData: (results: FlatfileResults) => Promise<string | void>;
+  @Input() onRecordInit?: RecordInitOrChangeCallback;
+  @Input() onRecordChange?: RecordInitOrChangeCallback;
 
   private _isImporterLoaded = true;
   private flatfileImporter: FlatfileImporter;
@@ -61,13 +56,13 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
         }
       }
     }
-    if (this.recordChange || this.recordInit) {
-      this.flatfileImporter.registerRecordHook((record: any, index: number, eventType: string) => {
-        if (eventType === 'init' && this.recordInit) {
-          this.recordInitChange.next({ data: record, index });
+    if (this.onRecordChange || this.onRecordInit) {
+      this.flatfileImporter.registerRecordHook(async (record: any, index: number, eventType: string) => {
+        if (eventType === 'init' && this.onRecordInit) {
+          return await this.onRecordInit(record, index);
         }
-        if (eventType === 'change' && this.recordChange) {
-          this.recordChangeChange.next({ data: record, index });
+        if (eventType === 'change' && this.onRecordChange) {
+          return await this.onRecordChange(record, index);
         }
       });
     }
@@ -78,11 +73,10 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
   }
 
   public launch(): void {
-    const dataHandler = async (results: FlatfileResults) => {
+    const dataHandler = (results: FlatfileResults) => {
       this.flatfileImporter?.displayLoader();
-      this.dataChange.next(results);
 
-      this.data?.(results).then(
+      this.onData(results).then(
         (optionalMessage?: string | void) => {
           this.flatfileImporter?.displaySuccess(optionalMessage || 'Success!');
         },

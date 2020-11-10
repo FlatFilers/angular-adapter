@@ -11,6 +11,9 @@
   "bugs": {
     "url": "https://github.com/FlatFilers/angular-adapter/issues"
   },
+  "author": {
+    "name": "Mark Pieszak"
+  },
   "keywords": [
     "flatfile",
     "flatfile angular",

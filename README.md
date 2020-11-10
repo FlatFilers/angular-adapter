@@ -19,6 +19,8 @@ imports: [
 ]
 ```
 
+> Tip: Make sure to use `.bind(this)` when passing down things like onData/onRecordInit/onRecordChange so that if you're using any props/methods within your Component, you won't have any errors.
+
 ```ts
 // Within a Components template use the flatfile-button
 

@@ -26,18 +26,20 @@ import { ISettings } from './interfaces/settings';
   `,
 })
 export class FlatfileButtonComponent implements OnInit, OnDestroy {
-  @ViewChild('ref', { static: true }) ref: HTMLElement;
 
   @Input() settings: ISettings;
   @Input() licenseKey: string;
   @Input() customer: CustomerObject;
+
   @Input() fieldHooks?: Record<string, FieldHookCallback>;
-  @Input() onData: (results: FlatfileResults) => Promise<string | void>;
+  @Input() onData?: (results: FlatfileResults) => Promise<string | void>;
   @Input() onRecordInit?: RecordInitOrChangeCallback;
   @Input() onRecordChange?: RecordInitOrChangeCallback;
   @Input() source?: LoadOptionsObject['source'];
 
-  @Output() cancel = new EventEmitter<void>();
+  @Output() cancel?: EventEmitter<void> = new EventEmitter<void>();
+
+  @ViewChild('ref', { static: true }) ref: HTMLElement;
 
   private _isImporterLoaded = true;
   private flatfileImporter: FlatfileImporter;

@@ -1,5 +1,5 @@
 import { FieldHookCallback } from '@flatfile/adapter';
-import FlatfileResults from '@flatfile/adapter/build/main/results';
+import { default as FlatfileResults } from '@flatfile/adapter/build/main/results';
 import { IDictionary, RecordInitOrChangeCallback } from './general';
 
 export interface FlatfileMethods {

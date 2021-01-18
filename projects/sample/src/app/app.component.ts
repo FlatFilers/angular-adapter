@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IDataHookResponse } from '@flatfile/adapter/build/main/obj.validation-response';
-import FlatfileResults from '@flatfile/adapter/build/main/results';
-import { FieldHookCallback, FlatfileMethods, ScalarDictionaryWithCustom } from 'projects/angular-adapter/src/public-api';
+import { FieldHookCallback, FlatfileMethods, ScalarDictionaryWithCustom, FlatfileResults } from 'projects/angular-adapter/src/public-api';
 
 @Component({
   selector: 'app-root',

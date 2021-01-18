@@ -46,4 +46,4 @@ testem.log
 Thumbs.db
 
 # duplicated readme file
-# /projects/angular-adapter/readme.md
+/projects/angular-adapter/readme.md

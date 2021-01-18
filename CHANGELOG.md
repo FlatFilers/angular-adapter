@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.0.2
+
+Fixed import for FlatfileResults to come from @flatfile/angular library correctly.
+
 ### 1.0.0
 
 Breaking Changes:

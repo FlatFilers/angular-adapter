@@ -90,18 +90,23 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
     const dataHandler = (results: FlatfileResults) => {
       this.flatfileImporter?.displayLoader();
 
-      this.onData(results).then(
-        (optionalMessage?: string | void) => {
-          this.flatfileImporter?.displaySuccess(optionalMessage || 'Success!');
-        },
-        (error: any) => {
-          this.flatfileImporter
-            ?.requestCorrectionsFromUser(
-              error instanceof Error ? error.message : error
-            )
-            .then(dataHandler, () => this.cancel.next());
-        }
-      );
+      if (this.onData) {
+        this.onData(results).then(
+          (optionalMessage?: string | void) => {
+            this.flatfileImporter?.displaySuccess(optionalMessage || 'Success!');
+          },
+          (error: any) => {
+            this.flatfileImporter
+              ?.requestCorrectionsFromUser(
+                error instanceof Error ? error.message : error
+              )
+              .then(dataHandler, () => this.cancel.next());
+          }
+        );
+      } else {
+        this.flatfileImporter?.displaySuccess('Success!');
+      }
+
     };
 
     if (!this.flatfileImporter) {

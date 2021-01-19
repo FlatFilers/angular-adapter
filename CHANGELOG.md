@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.1.3
+
+Fix onData bug when not present in user code.
+
 ### 1.1.2
 
 Exported `FlatfileCustomer` interface.

@@ -1,5 +1,12 @@
 # Flatfile Angular Component - @flatfile/angular
 
+[![npm](https://img.shields.io/npm/v/@flatfile/angular.svg?label=npm%20version&color=2EBF6A&style=for-the-badge)](https://www.npmjs.com/@flatfile/angular)
+[![Minzipped Size](https://img.shields.io/bundlephobia/minzip/@flatfile/angular?color=794cff&style=for-the-badge)](https://bundlephobia.com/result?p=@flatfile/angular)
+[![NPM Downloads](https://img.shields.io/npm/dw/@flatfile/angular.svg?color=8c66ff&style=for-the-badge)](https://www.npmjs.com/@flatfile/angular)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge&color=794cff)](/LICENSE)
+
+---
+
 We've made it really simple for you to get started with Flatfile with our new Flatfile Component. Here's what you'll need to know to get started.
 
 First, install the dependency via npm:

@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.1.1
+
+Improved Flatfile configuration object to provide `licenseKey | settings | customer` objects and type definitions.
+
 ### 1.0.2
 
 Fixed import for FlatfileResults to come from @flatfile/angular library correctly.

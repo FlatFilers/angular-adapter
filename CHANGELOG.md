@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.1.2
+
+Exported `FlatfileCustomer` interface.
+`ISettings` and renamed to `FlatfileSettings`.
 ### 1.1.1
 
 Improved Flatfile configuration object to provide `licenseKey | settings | customer` objects and type definitions.

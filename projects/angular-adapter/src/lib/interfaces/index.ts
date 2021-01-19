@@ -1,4 +1,4 @@
-import { ISettings as FlatfileSettings } from './settings';
+import { FlatfileSettings } from './settings';
 
 export * from './angular-adapter.config';
 export { RecordInitOrChangeCallback, ScalarDictionary, ScalarDictionaryWithCustom } from './general';

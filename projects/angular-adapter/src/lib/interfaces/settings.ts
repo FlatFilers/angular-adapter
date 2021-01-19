@@ -1,6 +1,6 @@
 import { IDictionary, ScalarDictionary } from './general';
 
-export interface ISettings {
+export interface FlatfileSettings {
   /**
    * Type of record that is being imported. eg. "User", "Transaction"
    */

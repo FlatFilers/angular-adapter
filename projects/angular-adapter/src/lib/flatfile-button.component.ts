@@ -8,11 +8,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import FlatfileImporter, { FieldHookCallback } from '@flatfile/adapter';
-import CustomerObject from '@flatfile/adapter/build/main/obj.customer';
+import { default as FlatfileCustomer } from '@flatfile/adapter/build/main/obj.customer';
 import LoadOptionsObject from '@flatfile/adapter/build/main/obj.load-options';
 import FlatfileResults from '@flatfile/adapter/build/main/results';
 import { RecordInitOrChangeCallback } from './interfaces/general';
-import { ISettings } from './interfaces/settings';
+import { FlatfileSettings } from './interfaces/settings';
 
 @Component({
   selector: 'flatfile-button',
@@ -27,9 +27,9 @@ import { ISettings } from './interfaces/settings';
 })
 export class FlatfileButtonComponent implements OnInit, OnDestroy {
 
-  @Input() settings: ISettings;
+  @Input() settings: FlatfileSettings;
   @Input() licenseKey: string;
-  @Input() customer: CustomerObject;
+  @Input() customer: FlatfileCustomer;
 
   @Input() fieldHooks?: Record<string, FieldHookCallback>;
   @Input() onData?: (results: FlatfileResults) => Promise<string | void>;

@@ -1,13 +1,13 @@
 import { FieldHookCallback } from '@flatfile/adapter';
-import { default as CustomerObject } from '@flatfile/adapter/build/main/obj.customer';
+import { default as FlatfileCustomer } from '@flatfile/adapter/build/main/obj.customer';
 import { default as FlatfileResults } from '@flatfile/adapter/build/main/results';
 import { IDictionary, RecordInitOrChangeCallback } from './general';
-import { ISettings } from './settings';
+import { FlatfileSettings } from './settings';
 
 export interface FlatfileMethods {
   licenseKey: string;
-  customer: CustomerObject;
-  settings: ISettings;
+  customer: FlatfileCustomer;
+  settings: FlatfileSettings;
   onCancel?: () => void;
   onData?: (results: FlatfileResults) => Promise<string | void>;
   onRecordChange?: RecordInitOrChangeCallback;

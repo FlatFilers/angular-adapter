@@ -1,6 +1,6 @@
 {
   "name": "@flatfile/angular",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "homepage": "https://flatfile.io/",
   "description": "Angular flatfile adapter",
   "repository": {
@@ -23,8 +23,8 @@
     "angular csv import"
   ],
   "peerDependencies": {
-    "@angular/common": "^10.1.2",
-    "@angular/core": "^10.1.2"
+    "@angular/common": "^10.0.0 || ^11.0.0",
+    "@angular/core": "^10.0.0 || ^11.0.0"
   },
   "dependencies": {
     "@flatfile/adapter": "^2.0.0",

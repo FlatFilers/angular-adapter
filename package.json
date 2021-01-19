@@ -7,6 +7,7 @@
     "build": "ng build",
     "prebuild:prod": "sh ./cp-readme.sh",
     "build:prod": "ng build angular-adapter --prod",
+    "deploy": "cd dist/angular-adapter && npm publish",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "prebuild:prod": "sh ./cp-readme.sh",
+    "prebuild:prod": "sh ./cp-readme.sh && rm -rf ./dist",
     "build:prod": "ng build angular-adapter --prod",
     "deploy": "cd dist/angular-adapter && npm publish",
     "test": "ng test",

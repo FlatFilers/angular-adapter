@@ -22,19 +22,23 @@ import { FlatfileSettings } from './interfaces/settings';
       <div #ref [class.hide]="!isImporterLoaded">
         <ng-content></ng-content>
       </div>
-      <span *ngIf="!ref && !ref.innerHTML.trim() && isImporterLoaded">🔼 Upload with Flatfile</span>
+      <span *ngIf="!ref && !ref.innerHTML.trim() && isImporterLoaded"
+        >🔼 Upload with Flatfile</span
+      >
       <span *ngIf="!isImporterLoaded">
         🅧 Failed to Load Flatfile Importer
       </span>
     </button>
-
   `,
-  styles: [`
-    .hide { display: none; }
-  `]
+  styles: [
+    `
+      .hide {
+        display: none;
+      }
+    `,
+  ],
 })
 export class FlatfileButtonComponent implements OnInit, OnDestroy {
-
   @Input() settings: FlatfileSettings;
   @Input() licenseKey: string;
   @Input() customer: FlatfileCustomer;
@@ -61,8 +65,8 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
       this.customer
     );
 
-    this.flatfileImporter.registerNetworkErrorCallback(res => {
-      console.error(`[Error] Flatfile Angular Adapter - Network Error`)
+    this.flatfileImporter.registerNetworkErrorCallback((res) => {
+      console.error(`[Error] Flatfile Angular Adapter - Network Error`);
     });
 
     if (this.fieldHooks) {
@@ -97,7 +101,9 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
       if (this.onData) {
         this.onData(results).then(
           (optionalMessage?: string | void) => {
-            this.flatfileImporter?.displaySuccess(optionalMessage || 'Success!');
+            this.flatfileImporter?.displaySuccess(
+              optionalMessage || 'Success!'
+            );
           },
           (error: any) => {
             console.error(`Flatfile Error : ${error}`);
@@ -111,14 +117,11 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
       } else {
         this.flatfileImporter?.displaySuccess('Success!');
       }
-
     };
 
     if (!this.flatfileImporter) {
       this.isImporterLoaded = false;
-      console.error(
-        '[Error] Flatfile Angular Adapter - Failed to initialize'
-      );
+      console.error('[Error] Flatfile Angular Adapter - Failed to initialize');
       return;
     }
     const loadOptions: LoadOptionsObject | undefined = this.source
@@ -143,5 +146,4 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
       this.isImporterLoaded = false;
     }
   }
-
 }

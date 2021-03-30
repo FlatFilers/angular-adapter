@@ -23,7 +23,11 @@ import { FieldHookCallback, FlatfileMethods, ScalarDictionaryWithCustom, Flatfil
 })
 export class AppComponent implements FlatfileMethods {
   customer = { userId: '12345' };
-  licenseKey = 'LICENSE_KEY_HERE';
+  /**
+   * @NOTE - PLACE YOUR FLATFILE LICENSE KEY HERE
+   * 👇👇👇
+   */
+  licenseKey = '04552f9f-f9b0-4626-9d68-00ad2f192c2f';
   settings = {
     type: 'test import',
     fields: [

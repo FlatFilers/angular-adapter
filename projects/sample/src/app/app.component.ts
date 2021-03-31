@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { IDataHookResponse } from '@flatfile/adapter/build/main/obj.validation-response';
-import { FieldHookCallback, FlatfileMethods, ScalarDictionaryWithCustom, FlatfileResults } from 'projects/angular-adapter/src/public-api';
+import {
+  FieldHookCallback,
+  FlatfileMethods,
+  ScalarDictionaryWithCustom,
+  FlatfileResults,
+} from 'projects/angular-adapter/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -15,15 +20,20 @@ import { FieldHookCallback, FlatfileMethods, ScalarDictionaryWithCustom, Flatfil
       [onData]="onData.bind(this)"
       [onRecordInit]="onRecordInit.bind(this)"
       [onRecordChange]="onRecordChange.bind(this)"
-      (cancel)="onCancel()">
+      (cancel)="onCancel()"
+    >
       This text is coming from the end-user of this component
     </flatfile-button>
   `,
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements FlatfileMethods {
   customer = { userId: '12345' };
-  licenseKey = 'LICENSE_KEY_HERE';
+  /**
+   * @NOTE - PLACE YOUR FLATFILE LICENSE KEY HERE
+   * 👇👇👇
+   */
+  licenseKey = '04552f9f-f9b0-4626-9d68-00ad2f192c2f';
   settings = {
     type: 'test import',
     fields: [
@@ -38,10 +48,13 @@ export class AppComponent implements FlatfileMethods {
   fieldHooks: Record<string, FieldHookCallback> = {
     email: (values) => {
       return values.map(([item, index]) => [
-        { value: item + '@', info: [{message: 'added @ after the email', level: 'warning'}] },
-        index
+        {
+          value: item + '@',
+          info: [{ message: 'added @ after the email', level: 'warning' }],
+        },
+        index,
       ]);
-    }
+    },
   };
 
   onData(results: FlatfileResults): Promise<string> {
@@ -50,30 +63,38 @@ export class AppComponent implements FlatfileMethods {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (errorState) {
-            reject('rejected - this text is controlled by the end-user');
-            errorState = false;
-          } else {
-            resolve('Flatfile upload successful - this text is controlled by the end-user');
-          }
+          reject('rejected - this text is controlled by the end-user');
+          errorState = false;
+        } else {
+          resolve(
+            'Flatfile upload successful - this text is controlled by the end-user'
+          );
+        }
       }, 3000);
     });
   }
 
-  onRecordInit(record: ScalarDictionaryWithCustom, index: number): IDataHookResponse | Promise<IDataHookResponse> {
+  onRecordInit(
+    record: ScalarDictionaryWithCustom,
+    index: number
+  ): IDataHookResponse | Promise<IDataHookResponse> {
     return {
       email: {
         value: record.email + '@',
-        info: [{ message: 'added @ on init', level: 'info' }]
-      }
+        info: [{ message: 'added @ on init', level: 'info' }],
+      },
     };
   }
 
-  onRecordChange(record: ScalarDictionaryWithCustom, index: number): IDataHookResponse | Promise<IDataHookResponse> {
+  onRecordChange(
+    record: ScalarDictionaryWithCustom,
+    index: number
+  ): IDataHookResponse | Promise<IDataHookResponse> {
     return {
       email: {
         value: record.email + '#',
-        info: [{ message: 'added # on change', level: 'warning' }]
-      }
+        info: [{ message: 'added # on change', level: 'warning' }],
+      },
     };
   }
 
@@ -83,5 +104,4 @@ export class AppComponent implements FlatfileMethods {
   onCancel(): void {
     console.log('canceled!');
   }
-
 }

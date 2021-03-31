@@ -5,14 +5,9 @@ import { AppComponent } from './app.component';
 import { FlatfileAdapterModule } from 'projects/angular-adapter/src/public-api';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    FlatfileAdapterModule,
-  ],
+  declarations: [AppComponent],
+  imports: [BrowserModule, FlatfileAdapterModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

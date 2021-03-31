@@ -7,9 +7,8 @@ describe('FlatfileButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FlatfileButtonComponent ]
-    })
-    .compileComponents();
+      declarations: [FlatfileButtonComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

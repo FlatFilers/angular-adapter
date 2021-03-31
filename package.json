@@ -7,10 +7,12 @@
     "build": "ng build",
     "prebuild:prod": "sh ./cp-readme.sh && rm -rf ./dist",
     "build:prod": "ng build angular-adapter --prod",
+    "format": "prettier --write \"projects/**/*.ts\"",
     "deploy": "cd dist/angular-adapter && npm publish",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -37,6 +39,8 @@
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
     "commitlint": "^11.0.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.0.0",
@@ -45,9 +49,11 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "ng-packagr": "^10.1.0",
+    "prettier": "^2.2.1",
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.0.2"
+    "typescript": "~4.0.2",
+    "husky": "^6.0.0"
   }
 }

@@ -1,5 +1,6 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
@@ -17,20 +18,30 @@ import { FlatfileSettings } from './interfaces/settings';
 @Component({
   selector: 'flatfile-button',
   template: `
-    <button *ngIf="isImporterLoaded; else failedLoading" (click)="launch()">
-      <ng-content #ref></ng-content>
-      <span *ngIf="isButtonPresent">🔼 Upload with Flatfile</span>
+    <button (click)="launch()" [disabled]="!isImporterLoaded">
+      <div #ref [class.hide]="!isImporterLoaded">
+        <ng-content></ng-content>
+      </div>
+      <span *ngIf="!ref && !ref.innerHTML.trim() && isImporterLoaded"
+        >🔼 Upload with Flatfile</span
+      >
+      <span *ngIf="!isImporterLoaded">
+        🅧 Failed to Load Flatfile Importer
+      </span>
     </button>
-
-    <ng-template #failedLoading> Failed to load importer </ng-template>
   `,
+  styles: [
+    `
+      .hide {
+        display: none;
+      }
+    `,
+  ],
 })
 export class FlatfileButtonComponent implements OnInit, OnDestroy {
-
   @Input() settings: FlatfileSettings;
   @Input() licenseKey: string;
   @Input() customer: FlatfileCustomer;
-
   @Input() fieldHooks?: Record<string, FieldHookCallback>;
   @Input() onData?: (results: FlatfileResults) => Promise<string | void>;
   @Input() onRecordInit?: RecordInitOrChangeCallback;
@@ -39,18 +50,11 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
 
   @Output() cancel?: EventEmitter<void> = new EventEmitter<void>();
 
-  @ViewChild('ref', { static: true }) ref: HTMLElement;
+  @ViewChild('ref', { read: ElementRef, static: true }) ref: ElementRef;
 
-  private _isImporterLoaded = true;
+  isImporterLoaded: boolean = true;
+
   private flatfileImporter: FlatfileImporter;
-
-  get isImporterLoaded(): boolean {
-    return this._isImporterLoaded;
-  }
-
-  get isButtonPresent(): boolean {
-    return this.ref && !this.ref.innerHTML.trim();
-  }
 
   public ngOnInit(): void {
     this.validateInputs();
@@ -60,6 +64,10 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
       this.settings,
       this.customer
     );
+
+    this.flatfileImporter.registerNetworkErrorCallback((res) => {
+      console.error(`[Error] Flatfile Angular Adapter - Network Error`);
+    });
 
     if (this.fieldHooks) {
       for (const key in this.fieldHooks) {
@@ -93,9 +101,12 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
       if (this.onData) {
         this.onData(results).then(
           (optionalMessage?: string | void) => {
-            this.flatfileImporter?.displaySuccess(optionalMessage || 'Success!');
+            this.flatfileImporter?.displaySuccess(
+              optionalMessage || 'Success!'
+            );
           },
           (error: any) => {
+            console.error(`Flatfile Error : ${error}`);
             this.flatfileImporter
               ?.requestCorrectionsFromUser(
                 error instanceof Error ? error.message : error
@@ -106,11 +117,11 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
       } else {
         this.flatfileImporter?.displaySuccess('Success!');
       }
-
     };
 
     if (!this.flatfileImporter) {
-      this._isImporterLoaded = false;
+      this.isImporterLoaded = false;
+      console.error('[Error] Flatfile Angular Adapter - Failed to initialize');
       return;
     }
     const loadOptions: LoadOptionsObject | undefined = this.source
@@ -126,13 +137,13 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
       console.error(
         '[Error] Flatfile Angular Adapter - licenseKey not provided!'
       );
-      this._isImporterLoaded = false;
+      this.isImporterLoaded = false;
     }
     if (!this.customer?.userId) {
       console.error(
         '[Error] Flatfile Angular Adapter - customer userId not provided!'
       );
-      this._isImporterLoaded = false;
+      this.isImporterLoaded = false;
     }
   }
 }

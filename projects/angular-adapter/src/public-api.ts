@@ -9,4 +9,9 @@ import { default as FlatfileResults } from '@flatfile/adapter/build/main/results
 export * from './lib/flatfile-adapter.module';
 export * from './lib/flatfile-button.component';
 export * from './lib/interfaces';
-export { FlatfileCustomer, FlatfileImporter, FlatfileResults, FieldHookCallback };
+export {
+  FlatfileCustomer,
+  FlatfileImporter,
+  FlatfileResults,
+  FieldHookCallback,
+};

@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.1.4
+
+Fix compatibility with older Angular v8 (and lower) + older TypeScript versions.
+
 ### 1.1.3
 
 Fix onData bug when not present in user code.

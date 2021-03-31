@@ -152,6 +152,5 @@ Then run:
 
 ```bash
 npm run build:prod
-cd dist/angular-adapter
-npm publish
+npm run publish:pkg
 ```

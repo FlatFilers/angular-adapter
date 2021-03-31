@@ -8,6 +8,7 @@
     "prebuild:prod": "sh ./cp-readme.sh && rm -rf ./dist",
     "build:prod": "ng build angular-adapter --prod",
     "format": "prettier --write \"projects/**/*.ts\"",
+    "publish:pkg": "cd dist/angular-adapter && npm publish",
     "deploy": "cd dist/angular-adapter && npm publish",
     "test": "ng test",
     "lint": "ng lint",

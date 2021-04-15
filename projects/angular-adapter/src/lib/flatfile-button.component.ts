@@ -43,6 +43,7 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
   @Input() licenseKey: string;
   @Input() customer: FlatfileCustomer;
   @Input() fieldHooks?: Record<string, FieldHookCallback>;
+  @Input() mountUrl?: string;
   @Input() onData?: (results: FlatfileResults) => Promise<string | void>;
   @Input() onRecordInit?: RecordInitOrChangeCallback;
   @Input() onRecordChange?: RecordInitOrChangeCallback;
@@ -58,6 +59,10 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.validateInputs();
+
+    if (this.mountUrl) {
+      FlatfileImporter.setMountUrl(this.mountUrl);
+    }
 
     this.flatfileImporter = new FlatfileImporter(
       this.licenseKey,

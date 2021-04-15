@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.2.0
+
+New feature @Input `[mountUrl]=""` added.
+
 ### 1.1.4
 
 Fix compatibility with older Angular v8 (and lower) + older TypeScript versions.

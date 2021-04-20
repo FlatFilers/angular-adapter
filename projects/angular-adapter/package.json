@@ -1,6 +1,6 @@
 {
   "name": "@flatfile/angular",
-  "version": "1.2.1-beta.3",
+  "version": "1.2.2",
   "homepage": "https://flatfile.io/",
   "description": "Angular flatfile adapter",
   "repository": {

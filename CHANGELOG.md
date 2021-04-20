@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.2.2
+
+Update to use the latest `@flatfile/adapter` fixing build/compilation bugs for exports not publicly available, clean up default export usage, and redundant interfaces found in this package (using adapter base version now).
+
 ### 1.2.0
 
 New feature @Input `[mountUrl]=""` added.

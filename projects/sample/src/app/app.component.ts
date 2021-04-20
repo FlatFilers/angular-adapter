@@ -35,7 +35,6 @@ import {
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements FlatfileMethods {
-
   customer = { userId: '12345' };
   /**
    * @NOTE - PLACE YOUR FLATFILE LICENSE KEY HERE

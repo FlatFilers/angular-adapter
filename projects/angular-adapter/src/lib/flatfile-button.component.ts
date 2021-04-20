@@ -8,10 +8,13 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import FlatfileImporter, { FieldHookCallback } from '@flatfile/adapter';
-import { default as FlatfileCustomer } from '@flatfile/adapter/build/main/obj.customer';
-import LoadOptionsObject from '@flatfile/adapter/build/main/obj.load-options';
-import FlatfileResults from '@flatfile/adapter/build/main/results';
+import FlatfileImporter, {
+  FieldHookCallback,
+  CustomerObject as FlatfileCustomer,
+  LoadOptionsObject,
+  FlatfileResults,
+} from '@flatfile/adapter';
+
 import { RecordInitOrChangeCallback } from './interfaces/general';
 import { FlatfileSettings } from './interfaces/settings';
 

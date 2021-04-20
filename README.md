@@ -148,6 +148,8 @@ The same application will be fired up at `http://localhost:4200`.
 
 Ensure that the correct semantic version has been updated in the `projects/angular-adapter/package.json` version.
 
+Make sure that if you're updating the `@flatfile/adapter` version, to update it within the dependencies array of the `package.json` within the projects/angular-adapter/ library as well.
+
 Then run:
 
 ```bash

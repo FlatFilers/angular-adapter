@@ -1,4 +1,4 @@
-import { IDictionary, ScalarDictionary } from './general';
+import { IDictionary, ScalarDictionary } from '@flatfile/adapter';
 
 export interface FlatfileSettings {
   /**

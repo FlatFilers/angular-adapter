@@ -1,7 +1,10 @@
-import { FieldHookCallback } from '@flatfile/adapter';
-import { default as FlatfileCustomer } from '@flatfile/adapter/build/main/obj.customer';
-import { default as FlatfileResults } from '@flatfile/adapter/build/main/results';
-import { IDictionary, RecordInitOrChangeCallback } from './general';
+import {
+  FieldHookCallback,
+  CustomerObject as FlatfileCustomer,
+  FlatfileResults,
+  IDictionary,
+} from '@flatfile/adapter';
+import { RecordInitOrChangeCallback } from './general';
 import { FlatfileSettings } from './settings';
 
 export interface FlatfileMethods {

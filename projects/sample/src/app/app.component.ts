@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { IDataHookResponse } from '@flatfile/adapter/build/main/obj.validation-response';
 import {
   FieldHookCallback,
   FlatfileMethods,
   ScalarDictionaryWithCustom,
   FlatfileResults,
+  IDataHookResponse,
 } from 'projects/angular-adapter/src/public-api';
 
 @Component({
@@ -24,16 +24,25 @@ import {
     >
       This text is coming from the end-user of this component
     </flatfile-button>
+
+    <br /><br />
+
+    <div *ngIf="results">
+      <strong>Results coming back from Flatfile:</strong>
+      {{ results | json }}
+    </div>
   `,
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements FlatfileMethods {
+
   customer = { userId: '12345' };
   /**
    * @NOTE - PLACE YOUR FLATFILE LICENSE KEY HERE
    * 👇👇👇
    */
-  licenseKey = '04552f9f-f9b0-4626-9d68-00ad2f192c2f';
+  licenseKey = 'YOUR_LICENSE_KEY_HERE';
+
   settings = {
     type: 'test import',
     fields: [
@@ -41,6 +50,8 @@ export class AppComponent implements FlatfileMethods {
       { label: 'Email', key: 'email' },
     ],
   };
+
+  results;
 
   /*
    * @Input()'s
@@ -60,6 +71,11 @@ export class AppComponent implements FlatfileMethods {
   onData(results: FlatfileResults): Promise<string> {
     let errorState = false;
 
+    console.log('onData()');
+    console.log(results.data);
+
+    this.results = results.data;
+
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (errorState) {
@@ -78,6 +94,9 @@ export class AppComponent implements FlatfileMethods {
     record: ScalarDictionaryWithCustom,
     index: number
   ): IDataHookResponse | Promise<IDataHookResponse> {
+    console.log('onRecordInit()');
+    console.log(record);
+
     return {
       email: {
         value: record.email + '@',
@@ -90,6 +109,9 @@ export class AppComponent implements FlatfileMethods {
     record: ScalarDictionaryWithCustom,
     index: number
   ): IDataHookResponse | Promise<IDataHookResponse> {
+    console.log('onRecordChange()');
+    console.log(record);
+
     return {
       email: {
         value: record.email + '#',

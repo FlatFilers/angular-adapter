@@ -34,10 +34,53 @@ imports: [
 ]
 ```
 
-> Tip: Make sure to use `.bind(this)` when passing down things like onData/onRecordInit/onRecordChange so that if you're using any props/methods within your Component, you won't have any errors.
+Within a Components template use the flatfile-button:
 
 ```ts
-// Within a Components template use the flatfile-button
+import {
+  // This interface is optional, but helpful to show you all the available required & optional inputs/outputs available to you
+  FlatfileMethods
+} from "@flatfile/angular";
+
+@Component({
+  template: `
+    <flatfile-button
+      [settings]="settings"
+      [customer]="customer"
+      [licenseKey]="licenseKey">
+      Text you want to show for the button
+    </flatfile-button>
+  `
+}) export class MyDemoComponent implements FlatfileMethods {
+  
+  customer = { userId: '12345' };
+  licenseKey = 'YOUR_LICENSE_KEY_HERE'; // <-- Don't forget your license key!
+  settings = {
+    type: 'test import',
+    fields: [
+      { label: 'Name', key: 'name' },
+      { label: 'Email', key: 'email' },
+    ],
+  };
+}
+```
+
+---
+
+### More advanced use-case example
+
+> Tip: Make sure to use `.bind(this)` when passing down things like onData/onRecordInit/onRecordChange so that if you're using any props/methods within your Component, you won't have any errors.
+
+Within a Components template use the flatfile-button
+
+```ts
+import {
+  FlatfileMethods,
+  FieldHookCallback,
+  FlatfileResults,
+  IDataHookResponse,
+  ScalarDictionaryWithCustom,
+} from "@flatfile/angular";
 
 @Component({
   template: `
@@ -50,13 +93,13 @@ imports: [
       [onRecordInit]="onRecordInit.bind(this)"
       [onRecordChange]="onRecordChange.bind(this)"
       (cancel)="onCancel()">
-      This text is coming from the end-user of this component
+      Text you want to show for the button
     </flatfile-button>
   `
-}) export class MyDemoComponent {
+}) export class MyDemoComponent implements FlatfileMethods {
   
   customer = { userId: '12345' };
-  licenseKey = 'LICENSE_KEY_HERE';
+  licenseKey = 'YOUR_LICENSE_KEY_HERE'; // <-- Don't forget your license key!
   settings = {
     type: 'test import',
     fields: [

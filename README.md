@@ -17,6 +17,12 @@ This will give you access to the `<flatfile-button />` component as well as the 
 
 ---
 
+#### Changelog
+
+To view information about the latest releases and any minor/major changes, check out the [changelog here](./CHANGELOG.md).
+
+---
+
 ## Codesandbox Demo
 
 Try it for yourself in the [CodesandBox here](https://codesandbox.io/s/angular-component-example-forked-jhbvy?file=/src/app/app.component.ts).

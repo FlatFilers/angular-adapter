@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.2.6
+
+Fix broken codesandbox link
 ### 1.2.4
 
 Update to use the latest `@flatfile/adapter` fixing build/compilation bugs for exports not publicly available, clean up default export usage, and redundant interfaces found in this package (using adapter base version now).

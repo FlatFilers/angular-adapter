@@ -25,7 +25,7 @@ To view information about the latest releases and any minor/major changes, check
 
 ## Codesandbox Demo
 
-Try it for yourself in the [CodesandBox here](https://codesandbox.io/s/angular-component-example-forked-jhbvy?file=/src/app/app.component.ts).
+Try it for yourself in the [CodesandBox here](https://codesandbox.io/s/flatfile-angular-demo-w10yx?file=/src/app/app.component.ts).
 
 ---
 
@@ -197,7 +197,7 @@ The same application will be fired up at `http://localhost:4200`.
 
 Ensure that the correct semantic version has been updated in the `projects/angular-adapter/package.json` version.
 
-Make sure that if you're updating the `@flatfile/adapter` version, to update it within the dependencies array of the `package.json` within the projects/angular-adapter/ library as well.
+Make sure that if you're updating the (base package) `@flatfile/adapter` version, to update it within the dependencies array of the `package.json` within the projects/angular-adapter/ library as well.
 
 Then run:
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import {
   FieldHookCallback,
   FlatfileMethods,
@@ -21,6 +21,7 @@ import {
       [onRecordInit]="onRecordInit.bind(this)"
       [onRecordChange]="onRecordChange.bind(this)"
       (cancel)="onCancel()"
+      class="flatfile-button"
     >
       This text is coming from the end-user of this component
     </flatfile-button>
@@ -32,7 +33,22 @@ import {
       {{ results | json }}
     </div>
   `,
-  styleUrls: ['./app.component.css'],
+  /**
+   * @note Important if you want to style the child component
+   * from this "parent" component
+   */
+  encapsulation: ViewEncapsulation.None,
+  styles: [
+    `
+      .flatfile-button button {
+        border: 0;
+        border-radius: 3px;
+        padding: 1rem;
+        background: #794cff;
+        color: #fff;
+      }
+    `,
+  ],
 })
 export class AppComponent implements FlatfileMethods {
   customer = { userId: '12345' };

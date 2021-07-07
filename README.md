@@ -98,10 +98,25 @@ import {
       [onData]="onData.bind(this)"
       [onRecordInit]="onRecordInit.bind(this)"
       [onRecordChange]="onRecordChange.bind(this)"
-      (cancel)="onCancel()">
+      (cancel)="onCancel()"
+      class="flatfile-button">
       Text you want to show for the button
     </flatfile-button>
-  `
+  `,
+  /**
+   * @note Important if you want to style the child component
+   * from this "parent" component
+   */
+  encapsulation: ViewEncapsulation.None, 
+  styles: [`
+    .flatfile-button button {
+        border: 0;
+        border-radius: 3px;
+        padding: 1rem;
+        background: #794cff;
+        color: #fff;
+      }
+  `],
 }) export class MyDemoComponent implements FlatfileMethods {
   
   customer = { userId: '12345' };
@@ -166,10 +181,13 @@ import {
     console.log('canceled!');
   }
 }
-
-
-
 ```
+
+#### Styling the component
+
+Note that in order to style this child-component (from the parent), simply supply a `class=""` to the `<flatfile-button class="some_class_name">`, and ensure that your parent component has `encapsulation` set to `ViewEncapsulation.None` (showcased above in this advanced demo).
+
+---
 
 | **<u>flatfile-button options</u>**                                                                                         | **<u>Info</u>**               | <u>**Example**</u>                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------- | -------------------------------------- |

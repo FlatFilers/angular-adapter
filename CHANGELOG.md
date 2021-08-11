@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.2.8
+
+Fixed underlying `@flatfile/adapter` package to fix this packages ability to work with older versions of Angular (such as v8).
+
 ### 1.2.6
 
 Fix broken codesandbox link

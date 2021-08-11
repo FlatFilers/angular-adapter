@@ -9,6 +9,8 @@
 
 We've made it really simple for you to get started with Flatfile with our new Flatfile Component. Here's what you'll need to know to get started.
 
+> Note: This package is ideally suited for Angular version 8+ (or higher)
+
 First, install the dependency via npm:
 
 `npm install @flatfile/angular`

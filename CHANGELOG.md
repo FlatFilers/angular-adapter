@@ -1,5 +1,8 @@
 # Changelog
 
+### 1.2.9
+Minor release to bump base adapter version to fix minor bug there.
+
 ### 1.2.8
 
 Fixed underlying `@flatfile/adapter` package to fix this packages ability to work with older versions of Angular (such as v8).

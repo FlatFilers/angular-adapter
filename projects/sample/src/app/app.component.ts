@@ -1,10 +1,10 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import {
-  FieldHookCallback,
   FlatfileMethods,
-  ScalarDictionaryWithCustom,
-  FlatfileResults,
-  IDataHookResponse,
+  InitParams,
+  LaunchParams,
+  CompleteParams,
+  ErrorParams,
 } from 'projects/angular-adapter/src/public-api';
 
 @Component({
@@ -13,14 +13,12 @@ import {
     <h1>Flatfile Angular button sample</h1>
 
     <flatfile-button
-      [settings]="settings"
-      [customer]="customer"
-      [licenseKey]="licenseKey"
-      [fieldHooks]="fieldHooks"
-      [onData]="onData.bind(this)"
-      [onRecordInit]="onRecordInit.bind(this)"
-      [onRecordChange]="onRecordChange.bind(this)"
-      (cancel)="onCancel()"
+      [token]="token"
+      [onInit]="onInit.bind(this)"
+      [onLaunch]="onLaunch.bind(this)"
+      [onComplete]="onComplete.bind(this)"
+      [onClose]="onClose.bind(this)"
+      [onError]="onError.bind(this)"
       class="flatfile-button"
     >
       This text is coming from the end-user of this component
@@ -34,8 +32,11 @@ import {
     </div>
   `,
   /**
-   * @note Important if you want to style the child component
+   * @note IMPORTANT if you want to style the child component
    * from this "parent" component
+   *
+   * @note then access the "button" inside of flatfile-button
+   * with css (as shown below)
    */
   encapsulation: ViewEncapsulation.None,
   styles: [
@@ -51,94 +52,42 @@ import {
   ],
 })
 export class AppComponent implements FlatfileMethods {
-  customer = { userId: '12345' };
   /**
    * @NOTE - PLACE YOUR FLATFILE LICENSE KEY HERE
    * 👇👇👇
    */
-  licenseKey = 'YOUR_LICENSE_KEY_HERE';
-
-  settings = {
-    type: 'test import',
-    fields: [
-      { label: 'Name', key: 'name' },
-      { label: 'Email', key: 'email' },
-    ],
-  };
+  token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWJlZCI6ImExMDEyYWNlLWMxMDUtNGU4Ny1hMDVlLTA5ZTlkMTI1YWFlMyIsInN1YiI6Im1heDExQGZsYXRmaWxlLmlvIn0.P64-P3vRH2XLwWbE9nkarDQv6UU2fIuuXYaY_rXAPpk';
 
   results;
 
   /*
-   * @Input()'s
+   * @Input() methods, make sure they are passed down to <flatfile-button>
+   *    via: .bind(this)
+   *
+   *    for example:
+   *      onInit.bind(this)
    */
-  fieldHooks: Record<string, FieldHookCallback> = {
-    email: (values) => {
-      return values.map(([item, index]) => [
-        {
-          value: item + '@',
-          info: [{ message: 'added @ after the email', level: 'warning' }],
-        },
-        index,
-      ]);
-    },
-  };
-
-  onData(results: FlatfileResults): Promise<string> {
-    let errorState = false;
-
-    console.log('onData()');
-    console.log(results.data);
-
-    this.results = results.data;
-
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (errorState) {
-          reject('rejected - this text is controlled by the end-user');
-          errorState = false;
-        } else {
-          resolve(
-            'Flatfile upload successful - this text is controlled by the end-user'
-          );
-        }
-      }, 3000);
-    });
+  onInit(params: InitParams) {
+    console.log(`onInit`);
+    console.log(params.batchId);
   }
-
-  onRecordInit(
-    record: ScalarDictionaryWithCustom,
-    index: number
-  ): IDataHookResponse | Promise<IDataHookResponse> {
-    console.log('onRecordInit()');
-    console.log(record);
-
-    return {
-      email: {
-        value: record.email + '@',
-        info: [{ message: 'added @ on init', level: 'info' }],
-      },
-    };
+  onLaunch(event: LaunchParams) {
+    console.log(`onLaunch`);
+    console.log(event);
   }
-
-  onRecordChange(
-    record: ScalarDictionaryWithCustom,
-    index: number
-  ): IDataHookResponse | Promise<IDataHookResponse> {
-    console.log('onRecordChange()');
-    console.log(record);
-
-    return {
-      email: {
-        value: record.email + '#',
-        info: [{ message: 'added # on change', level: 'warning' }],
-      },
-    };
+  onClose() {
+    console.log(`onClose`);
   }
+  onComplete(event: CompleteParams) {
+    console.log(`onComplete`);
+    console.log(event.batchId);
+    console.log(event.data);
 
-  /*
-   * @Output() handlers
-   */
-  onCancel(): void {
-    console.log('canceled!');
+    this.results = event.data;
+  }
+  onError(event: ErrorParams) {
+    console.log(`onError`);
+    console.log(event.error);
   }
 }

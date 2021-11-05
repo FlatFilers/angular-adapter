@@ -1,19 +1,17 @@
-import {
-  FieldHookCallback,
-  CustomerObject as FlatfileCustomer,
-  FlatfileResults,
-  IDictionary,
-} from '@flatfile/adapter';
-import { RecordInitOrChangeCallback } from './general';
-import { FlatfileSettings } from './settings';
+import { IEvents } from '@flatfile/sdk';
+
+export type InitParams = IEvents['init'];
+export type UploadParams = IEvents['upload'];
+export type ErrorParams = IEvents['error'];
+export type LaunchParams = IEvents['launch'];
+export type CompleteParams = IEvents['complete'];
+export type CloseParams = IEvents['close'];
 
 export interface FlatfileMethods {
-  licenseKey: string;
-  customer: FlatfileCustomer;
-  settings: FlatfileSettings;
-  onCancel?: () => void;
-  onData?: (results: FlatfileResults) => Promise<string | void>;
-  onRecordChange?: RecordInitOrChangeCallback;
-  onRecordInit?: RecordInitOrChangeCallback;
-  fieldHooks?: IDictionary<FieldHookCallback>;
+  onInit?: (params: InitParams) => void;
+  onUpload?: (params: UploadParams) => void;
+  onError?: (params: ErrorParams) => void;
+  onLaunch?: (params: LaunchParams) => void;
+  onComplete?: (params: CompleteParams) => void;
+  onClose?: () => void;
 }

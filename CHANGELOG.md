@@ -1,5 +1,14 @@
 # Changelog
 
+
+### 3.0.0
+This release utilizes the new flatfile/sdk which has numerous breaking changes.
+Read through the documentation (readme) and sample code provided here to see how you can upgrade your existing flatfile-button to this latest SDK.
+
+The only thing **REQUIRED** now for `<flatfile-button>` is the Input **`[token]`**, which you must retrieve from your backend.
+
+**More information [here](https://flatfile.com/docs/implementing-embeds/)**
+
 ### 1.2.9
 Minor release to bump base adapter version to fix minor bug there.
 

@@ -46,7 +46,7 @@ imports: [
 
 The only thing **REQUIRED** for `<flatfile-button>` is the Input **`[token]`**, which you must retrieve from your backend. 
 
-**More information on that [here](https://flatfile.com/docs/implementing-embeds/)**
+**More information [here](https://flatfile.com/docs/implementing-embeds/)**
 
 Now let's look at a simple example of getting everything up and running.
 

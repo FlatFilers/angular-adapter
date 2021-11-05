@@ -42,7 +42,13 @@ imports: [
 ]
 ```
 
-Within a Components template use the flatfile-button:
+#### Within a Components template use the flatfile-button:
+
+The only thing **REQUIRED** for `<flatfile-button>` is the Input **`[token]`**, which you must retrieve from your backend. 
+
+**More information on that [here](https://flatfile.com/docs/implementing-embeds/)**
+
+Now let's look at a simple example of getting everything up and running.
 
 ```ts
 import {
@@ -63,23 +69,6 @@ import {
     >
       Text you want to show for the button
     </flatfile-button>
-  `,
-  /**
-   * @note IMPORTANT if you want to style the child component
-   * from this "parent" component
-   *
-   * @note then access the "button" inside of flatfile-button
-   * with css (as shown below)
-   */
-  encapsulation: ViewEncapsulation.None,
-  styles: [`
-    .flatfile-button button {
-      border: 0;
-      border-radius: 3px;
-      padding: 1rem;
-      background: #794cff;
-      color: #fff;
-    }
   `,
 }) export class MyDemoComponent implements FlatfileMethods {
   /**
@@ -109,6 +98,8 @@ import {
 ### More advanced use-case example
 
 This is an example showcase all of the other additional (and optional) `@Output()` methods you could subscribe to.
+
+We're also showcasing how you can **style** your flatfile-button as well!
 
 Notice we're using all the Params interface (`InitParams` | `LaunchParams` etc to strongly type our Output method return values).
 
@@ -140,7 +131,25 @@ import {
     >
       Text you want to show for the button
     </flatfile-button>
-  `
+  `,
+  /**
+   * @note IMPORTANT if you want to style the child component
+   * from this "parent" component
+   */
+  encapsulation: ViewEncapsulation.None,
+  /**
+   * @note We gave our <flatfile-button class="flatfile-button"> a class,
+   * and if we access the "button" inside of that, we can style it however we want!
+   */
+  styles: [`
+    .flatfile-button button {
+      border: 0;
+      border-radius: 3px;
+      padding: 1rem;
+      background: #794cff;
+      color: #fff;
+    }
+  `,
 }) export class MyDemoComponent implements FlatfileMethods {
   
   /**

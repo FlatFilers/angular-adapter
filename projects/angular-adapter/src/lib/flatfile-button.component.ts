@@ -52,7 +52,9 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     if (!this.token) {
-      console.error('📥 Flatfile Importer ERROR - "token" missing via @Input()');
+      console.error(
+        '📥 Flatfile Importer ERROR - "token" missing via @Input()'
+      );
       this.isImporterLoaded = false;
       return;
     }

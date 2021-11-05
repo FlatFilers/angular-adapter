@@ -12,8 +12,4 @@ export * from './lib/flatfile-adapter.module';
 export * from './lib/flatfile-button.component';
 export * from './lib/interfaces';
 
-export {
-  flatfileImporter,
-  IFlatfileImporter,
-  IUnsafeGenerateTokenOptions,
-};
+export { flatfileImporter, IFlatfileImporter, IUnsafeGenerateTokenOptions };

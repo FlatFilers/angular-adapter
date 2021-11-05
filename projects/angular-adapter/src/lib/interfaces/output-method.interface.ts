@@ -1,4 +1,10 @@
-import { CompleteParams, ErrorParams, InitParams, LaunchParams, UploadParams } from "./params.interface";
+import {
+  CompleteParams,
+  ErrorParams,
+  InitParams,
+  LaunchParams,
+  UploadParams,
+} from './params.interface';
 
 export interface FlatfileMethods {
   onInit?: (params: InitParams) => void;

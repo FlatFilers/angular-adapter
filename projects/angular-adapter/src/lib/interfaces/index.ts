@@ -1,1 +1,2 @@
-export * from './angular-adapter.config';
+export * from './output-method.interface';
+export * from './params.interface';

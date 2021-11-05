@@ -5,6 +5,7 @@ import {
   LaunchParams,
   CompleteParams,
   ErrorParams,
+  UploadParams,
 } from 'projects/angular-adapter/src/public-api';
 
 @Component({
@@ -14,11 +15,12 @@ import {
 
     <flatfile-button
       [token]="token"
-      [onInit]="onInit.bind(this)"
-      [onLaunch]="onLaunch.bind(this)"
-      [onComplete]="onComplete.bind(this)"
-      [onClose]="onClose.bind(this)"
-      [onError]="onError.bind(this)"
+      (onInit)="onInit($event)"
+      (onLaunch)="onLaunch($event)"
+      (onComplete)="onComplete($event)"
+      (onUpload)="onUpload($event)"
+      (onError)="onError($event)"
+      (onClose)="onClose()"
       class="flatfile-button"
     >
       This text is coming from the end-user of this component
@@ -61,15 +63,15 @@ export class AppComponent implements FlatfileMethods {
   results;
 
   /*
-   * @Input() methods, make sure they are passed down to <flatfile-button>
-   *    via: .bind(this)
-   *
-   *    for example:
-   *      onInit.bind(this)
+   * @Output() methods, make sure they are passed down to <flatfile-button>
    */
   onInit(params: InitParams) {
     console.log(`onInit`);
     console.log(params.batchId);
+  }
+  onUpload(event: UploadParams) {
+    console.log(`onUpload`);
+    console.log(event);
   }
   onLaunch(event: LaunchParams) {
     console.log(`onLaunch`);

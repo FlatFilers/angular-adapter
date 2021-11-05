@@ -1,13 +1,15 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 
-import { flatfileImporter, IFlatfileImporter } from '@flatfile/sdk';
+import { flatfileImporter, IEvents, IFlatfileImporter } from '@flatfile/sdk';
 import { FlatfileMethods } from './interfaces';
 
 @Component({
@@ -35,11 +37,12 @@ import { FlatfileMethods } from './interfaces';
 })
 export class FlatfileButtonComponent implements OnInit, OnDestroy {
   @Input() token: string;
-  @Input() onInit?: FlatfileMethods['onInit'];
-  @Input() onLaunch?: FlatfileMethods['onLaunch'];
-  @Input() onClose?: FlatfileMethods['onClose'];
-  @Input() onComplete?: FlatfileMethods['onComplete'];
-  @Input() onError?: Function;
+  @Output() onInit? = new EventEmitter<IEvents['init']>();
+  @Output() onUpload? = new EventEmitter<IEvents['upload']>();
+  @Output() onLaunch? = new EventEmitter<IEvents['launch']>();
+  @Output() onClose? = new EventEmitter<IEvents['close']>();
+  @Output() onComplete? = new EventEmitter<IEvents['complete']>();
+  @Output() onError? = new EventEmitter<IEvents['error']>();
 
   @ViewChild('ref', { read: ElementRef, static: true }) ref: ElementRef;
 
@@ -49,31 +52,24 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     if (!this.token) {
-      console.error('Flatfile Importer ERROR - "token" missing via @Input()');
+      console.error('📥 Flatfile Importer ERROR - "token" missing via @Input()');
       this.isImporterLoaded = false;
       return;
     }
 
     if (typeof flatfileImporter === 'undefined') {
-      console.log('Flatfile Importer ERROR - importer failed to load');
+      console.log('📥 Flatfile Importer ERROR - importer failed to load');
       this.isImporterLoaded = false;
       return;
     }
 
     this.flatfileImporter = flatfileImporter(this.token);
 
-    if (typeof this.onInit === 'function') {
-      this.flatfileImporter.on('init', this.onInit);
-    }
-    if (typeof this.onLaunch === 'function') {
-      this.flatfileImporter.on('launch', this.onLaunch);
-    }
-    if (typeof this.onClose === 'function') {
-      this.flatfileImporter.on('close', this.onClose);
-    }
-    if (typeof this.onComplete === 'function') {
-      this.flatfileImporter.on('complete', this.onComplete);
-    }
+    this.flatfileImporter.on('init', (res) => this.onInit.next(res));
+    this.flatfileImporter.on('upload', (res) => this.onUpload.next(res));
+    this.flatfileImporter.on('launch', (res) => this.onLaunch.next(res));
+    this.flatfileImporter.on('close', (res) => this.onClose.next(res));
+    this.flatfileImporter.on('complete', (res) => this.onComplete.next(res));
   }
 
   public ngOnDestroy(): void {
@@ -82,7 +78,7 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
 
   public launch(): void {
     this.flatfileImporter.launch().catch((e: Error) => {
-      this.onError?.(e);
+      this.onError.next({ error: e });
     });
   }
 }

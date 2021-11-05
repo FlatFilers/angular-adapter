@@ -4,7 +4,6 @@
 
 import {
   flatfileImporter,
-  IEvents,
   IFlatfileImporter,
   IUnsafeGenerateTokenOptions,
 } from '@flatfile/sdk';
@@ -15,7 +14,6 @@ export * from './lib/interfaces';
 
 export {
   flatfileImporter,
-  IEvents,
   IFlatfileImporter,
   IUnsafeGenerateTokenOptions,
 };

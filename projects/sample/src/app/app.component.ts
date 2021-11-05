@@ -56,8 +56,7 @@ export class AppComponent implements FlatfileMethods {
    * @NOTE - PLACE YOUR FLATFILE LICENSE KEY HERE
    * 👇👇👇
    */
-  token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWJlZCI6ImExMDEyYWNlLWMxMDUtNGU4Ny1hMDVlLTA5ZTlkMTI1YWFlMyIsInN1YiI6Im1heDExQGZsYXRmaWxlLmlvIn0.P64-P3vRH2XLwWbE9nkarDQv6UU2fIuuXYaY_rXAPpk';
+  token = 'YOUR_TOKEN_HERE';
 
   results;
 

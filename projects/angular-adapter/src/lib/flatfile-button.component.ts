@@ -37,12 +37,12 @@ import { FlatfileMethods } from './interfaces';
 })
 export class FlatfileButtonComponent implements OnInit, OnDestroy {
   @Input() token: string;
-  @Output() onInit? = new EventEmitter<IEvents['init']>();
-  @Output() onUpload? = new EventEmitter<IEvents['upload']>();
-  @Output() onLaunch? = new EventEmitter<IEvents['launch']>();
-  @Output() onClose? = new EventEmitter<IEvents['close']>();
-  @Output() onComplete? = new EventEmitter<IEvents['complete']>();
-  @Output() onError? = new EventEmitter<IEvents['error']>();
+  @Output() onInit = new EventEmitter<IEvents['init']>();
+  @Output() onUpload = new EventEmitter<IEvents['upload']>();
+  @Output() onLaunch = new EventEmitter<IEvents['launch']>();
+  @Output() onClose = new EventEmitter<IEvents['close']>();
+  @Output() onComplete = new EventEmitter<IEvents['complete']>();
+  @Output() onError = new EventEmitter<IEvents['error']>();
 
   @ViewChild('ref', { read: ElementRef, static: true }) ref: ElementRef;
 

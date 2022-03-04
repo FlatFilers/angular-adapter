@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 
 import { flatfileImporter, IEvents, IFlatfileImporter } from '@flatfile/sdk';
-import { FlatfileMethods } from './interfaces';
 
 @Component({
   selector: 'flatfile-button',
@@ -37,6 +36,8 @@ import { FlatfileMethods } from './interfaces';
 })
 export class FlatfileButtonComponent implements OnInit, OnDestroy {
   @Input() token: string;
+  @Input() mountUrl?: string;
+  @Input() apiUrl?: string;
   @Output() onInit = new EventEmitter<IEvents['init']>();
   @Output() onUpload = new EventEmitter<IEvents['upload']>();
   @Output() onLaunch = new EventEmitter<IEvents['launch']>();
@@ -65,7 +66,10 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.flatfileImporter = flatfileImporter(this.token);
+    this.flatfileImporter = flatfileImporter(this.token, {
+      ...(this.mountUrl ? { mountUrl: this.mountUrl} : {}),
+      ...(this.apiUrl ? { apiUrl: this.apiUrl } : {}),
+    });
 
     this.flatfileImporter.on('init', (res) => this.onInit.next(res));
     this.flatfileImporter.on('upload', (res) => this.onUpload.next(res));

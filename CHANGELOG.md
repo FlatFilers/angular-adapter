@@ -1,5 +1,18 @@
 # Changelog
 
+### 3.1.0
+
+Update to the latest version of `@flatfile/sdk` (1.0.5), which adds `mountUrl` and `apiUrl` support.
+
+Now available as _optional_ `@Input()`'s (both are of type String)
+
+```html
+  <flatfile-button [token]="token"
+    [mountUrl]="mountUrl"
+    [apiUrl]="apiUrl">
+    Upload to Flafile
+  </flatfile-button>
+```
 
 ### 3.0.0
 This release utilizes the new flatfile/sdk which has numerous breaking changes.

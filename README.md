@@ -9,7 +9,19 @@
 
 We've made it really simple for you to get started with Flatfile with our new Flatfile Component. Here's what you'll need to know to get started.
 
-> Note: This package is ideally suited for Angular version 8+ (or higher)
+> NOTE: If you upgrading from previous versions (2.x), v3+ comes with some updates & breaking changes
+
+#### BREAKING CHANGES:
+
+Note that the latest version of `@flatfile/angular` 3+ uses the new `@flatfile/sdk` underneath which changes the API surface of interacting with the flatfile adapter entirely.
+
+[Read more about these changes here](https://flatfile.com/docs/implementing-embeds/)
+
+There is now only 1 required input, and that is `:token` (which you must receive from your backend).
+
+[Read more about generating a Token here](https://flatfile.com/docs/sdk/)
+
+## Getting Started with Flatfile & Angular
 
 First, install the dependency via npm:
 
@@ -95,7 +107,7 @@ import {
 
 ---
 
-### More advanced use-case example
+### More advanced use-case example (kitchen sink)
 
 This is an example showcase all of the other additional (and optional) `@Output()` methods you could subscribe to.
 
@@ -121,6 +133,8 @@ import {
   template: `
     <flatfile-button
       [token]="token"
+      [mountUrl]="mountUrl"
+      [apiUrl]="apiUrl"
       (onInit)="onInit($event)"
       (onLaunch)="onLaunch($event)"
       (onComplete)="onComplete($event)"
@@ -157,6 +171,11 @@ import {
    * 👇👇👇
    */
   token = 'YOUR_TOKEN_HERE';
+
+  /** optional **/
+  mountUrl = '';
+  /** optional **/
+  apiUrl = '';
 
   results;
 

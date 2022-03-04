@@ -15,6 +15,8 @@ import {
 
     <flatfile-button
       [token]="token"
+      [mountUrl]="mountUrl"
+      [apiUrl]="apiUrl"
       (onInit)="onInit($event)"
       (onLaunch)="onLaunch($event)"
       (onComplete)="onComplete($event)"
@@ -55,10 +57,15 @@ import {
 })
 export class AppComponent implements FlatfileMethods {
   /**
-   * @NOTE - PLACE YOUR FLATFILE LICENSE KEY HERE
+   * @NOTE - Call your backend & retrieve your Token, and pass down the license key
    * 👇👇👇
    */
   token = 'YOUR_TOKEN_HERE';
+
+  /** optional **/
+  mountUrl = '';
+  /** optional **/
+  apiUrl = '';
 
   results;
 

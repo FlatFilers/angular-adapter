@@ -7,8 +7,6 @@
 
 ---
 
-We've made it really simple for you to get started with Flatfile with our new Flatfile Component. Here's what you'll need to know to get started.
-
 > NOTE: If you upgrading from previous versions (2.x), v3+ comes with some updates & breaking changes
 
 #### BREAKING CHANGES:
@@ -17,11 +15,13 @@ Note that the latest version of `@flatfile/angular` 3+ uses the new `@flatfile/s
 
 [Read more about these changes here](https://flatfile.com/docs/implementing-embeds/)
 
-There is now only 1 required input, and that is `:token` (which you must receive from your backend).
+There is now only 1 required input, and that is `[token]` (which you must receive from your backend).
 
 [Read more about generating a Token here](https://flatfile.com/docs/sdk/)
 
 ## Getting Started with Flatfile & Angular
+
+We've made it really simple for you to get started with Flatfile with our new Flatfile Component. Here's what you'll need to know to get started.
 
 First, install the dependency via npm:
 
@@ -56,7 +56,7 @@ imports: [
 
 #### Within a Components template use the flatfile-button:
 
-The only thing **REQUIRED** for `<flatfile-button>` is the Input **`[token]`**, which you must retrieve from your backend. 
+The only thing **REQUIRED** for `<flatfile-button>` is the Input **`[token]`**, which you must retrieve from your backend.
 
 **More information [here](https://flatfile.com/docs/implementing-embeds/)**
 

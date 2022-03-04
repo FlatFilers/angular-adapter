@@ -67,7 +67,7 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
     }
 
     this.flatfileImporter = flatfileImporter(this.token, {
-      ...(this.mountUrl ? { mountUrl: this.mountUrl} : {}),
+      ...(this.mountUrl ? { mountUrl: this.mountUrl } : {}),
       ...(this.apiUrl ? { apiUrl: this.apiUrl } : {}),
     });
 

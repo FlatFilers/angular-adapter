@@ -9,7 +9,19 @@
 
 We've made it really simple for you to get started with Flatfile with our new Flatfile Component. Here's what you'll need to know to get started.
 
-> Note: This package is ideally suited for Angular version 8+ (or higher)
+> NOTE: If you upgrading from previous versions (2.x), v3+ comes with some updates & breaking changes
+
+#### BREAKING CHANGES:
+
+Note that the latest version of `@flatfile/angular` 3+ uses the new `@flatfile/sdk` underneath which changes the API surface of interacting with the flatfile adapter entirely.
+
+[Read more about these changes here](https://flatfile.com/docs/implementing-embeds/)
+
+There is now only 1 required input, and that is `:token` (which you must receive from your backend).
+
+[Read more about generating a Token here](https://flatfile.com/docs/sdk/)
+
+## Getting Started with Flatfile & Angular
 
 First, install the dependency via npm:
 
@@ -25,9 +37,9 @@ To view information about the latest releases and any minor/major changes, check
 
 ---
 
-## Codesandbox Demo
+<!-- ## Codesandbox Demo
 
-Try it for yourself in the [CodesandBox here](https://codesandbox.io/s/flatfile-angular-demo-w10yx?file=/src/app/app.component.ts).
+Try it for yourself in the [CodesandBox here](https://codesandbox.io/s/flatfile-angular-demo-w10yx?file=/src/app/app.component.ts). -->
 
 ---
 
@@ -42,164 +54,177 @@ imports: [
 ]
 ```
 
-Within a Components template use the flatfile-button:
+#### Within a Components template use the flatfile-button:
+
+The only thing **REQUIRED** for `<flatfile-button>` is the Input **`[token]`**, which you must retrieve from your backend. 
+
+**More information [here](https://flatfile.com/docs/implementing-embeds/)**
+
+Now let's look at a simple example of getting everything up and running.
 
 ```ts
 import {
   // This interface is optional, but helpful to show you all the available required & optional inputs/outputs available to you
-  FlatfileMethods
+  FlatfileMethods,
+  // The "Params" interfaces are useful to strongly type your output methods
+  CompleteParams, 
+  ErrorParams,
 } from "@flatfile/angular";
 
 @Component({
   template: `
     <flatfile-button
-      [settings]="settings"
-      [customer]="customer"
-      [licenseKey]="licenseKey">
+      [token]="token"
+      (onComplete)="onComplete($event)"
+      (onError)="onError($event)"
+      class="flatfile-button"
+    >
       Text you want to show for the button
     </flatfile-button>
-  `
+  `,
 }) export class MyDemoComponent implements FlatfileMethods {
+  /**
+   * @NOTE - Call your backend & retrieve your Token, and pass down the license key
+   * 👇👇👇
+   */
+  token = 'YOUR_TOKEN_HERE';
+  results;
+
+  onComplete(event: CompleteParams) {
+    console.log(`onComplete`);
+    console.log(event);
+
+    // Your data!
+    this.results = event.data;
+  }
+  onError(event: ErrorParams) {
+    console.log(`onError`);
+    console.log(event);
+  }
   
-  customer = { userId: '12345' };
-  licenseKey = 'YOUR_LICENSE_KEY_HERE'; // <-- Don't forget your license key!
-  settings = {
-    type: 'test import',
-    fields: [
-      { label: 'Name', key: 'name' },
-      { label: 'Email', key: 'email' },
-    ],
-  };
 }
 ```
 
 ---
 
-### More advanced use-case example
+### More advanced use-case example (kitchen sink)
 
-> Tip: Make sure to use `.bind(this)` when passing down things like onData/onRecordInit/onRecordChange so that if you're using any props/methods within your Component, you won't have any errors.
+This is an example showcase all of the other additional (and optional) `@Output()` methods you could subscribe to.
+
+We're also showcasing how you can **style** your flatfile-button as well!
+
+Notice we're using all the Params interface (`InitParams` | `LaunchParams` etc to strongly type our Output method return values).
 
 Within a Components template use the flatfile-button
 
 ```ts
 import {
+  // This interface is optional, but helpful to show you all the available required & optional inputs/outputs available to you
   FlatfileMethods,
-  FieldHookCallback,
-  FlatfileResults,
-  IDataHookResponse,
-  ScalarDictionaryWithCustom,
+  // The "Params" interfaces are useful to strongly type your output methods
+  InitParams,
+  LaunchParams,
+  CompleteParams,
+  ErrorParams,
+  UploadParams,
 } from "@flatfile/angular";
 
 @Component({
   template: `
     <flatfile-button
-      [settings]="settings"
-      [customer]="customer"
-      [licenseKey]="licenseKey"
-      [fieldHooks]="fieldHooks"
-      [onData]="onData.bind(this)"
-      [onRecordInit]="onRecordInit.bind(this)"
-      [onRecordChange]="onRecordChange.bind(this)"
-      (cancel)="onCancel()"
-      class="flatfile-button">
+      [token]="token"
+      [mountUrl]="mountUrl"
+      [apiUrl]="apiUrl"
+      (onInit)="onInit($event)"
+      (onLaunch)="onLaunch($event)"
+      (onComplete)="onComplete($event)"
+      (onUpload)="onUpload($event)"
+      (onError)="onError($event)"
+      (onClose)="onClose()"
+      class="flatfile-button"
+    >
       Text you want to show for the button
     </flatfile-button>
   `,
   /**
-   * @note Important if you want to style the child component
+   * @note IMPORTANT if you want to style the child component
    * from this "parent" component
    */
-  encapsulation: ViewEncapsulation.None, 
+  encapsulation: ViewEncapsulation.None,
+  /**
+   * @note We gave our <flatfile-button class="flatfile-button"> a class,
+   * and if we access the "button" inside of that, we can style it however we want!
+   */
   styles: [`
     .flatfile-button button {
-        border: 0;
-        border-radius: 3px;
-        padding: 1rem;
-        background: #794cff;
-        color: #fff;
-      }
-  `],
+      border: 0;
+      border-radius: 3px;
+      padding: 1rem;
+      background: #794cff;
+      color: #fff;
+    }
+  `,
 }) export class MyDemoComponent implements FlatfileMethods {
   
-  customer = { userId: '12345' };
-  licenseKey = 'YOUR_LICENSE_KEY_HERE'; // <-- Don't forget your license key!
-  settings = {
-    type: 'test import',
-    fields: [
-      { label: 'Name', key: 'name' },
-      { label: 'Email', key: 'email' },
-    ],
-  };
+  /**
+   * @NOTE - Call your backend & retrieve your Token, and pass down the license key
+   * 👇👇👇
+   */
+  token = 'YOUR_TOKEN_HERE';
+
+  /** optional **/
+  mountUrl = '';
+  /** optional **/
+  apiUrl = '';
+
+  results;
 
   /*
-   * @Input()'s
+   * @Output() methods, make sure they are passed down to <flatfile-button>
    */
-  fieldHooks: Record<string, FieldHookCallback> = {
-    email: (values) => {
-      return values.map(([item, index]) => [
-        { value: item + '@', info: [{message: 'added @ after the email', level: 'warning'}] },
-        index
-      ]);
-    }
-  };
-
-  onData(results: FlatfileResults): Promise<string> {
-    let errorState = false;
-
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (errorState) {
-            reject('rejected - this text is controlled by the end-user');
-            errorState = false;
-          } else {
-            resolve('Flatfile upload successful - this text is controlled by the end-user');
-          }
-      }, 3000);
-    });
+  onInit(event: InitParams) {
+    console.log(`onInit`);
+    console.log(event);
   }
-
-  onRecordInit(record: ScalarDictionaryWithCustom, index: number): IDataHookResponse | Promise<IDataHookResponse> {
-    return {
-      email: {
-        value: record.email + '@',
-        info: [{ message: 'added @ on init', level: 'info' }]
-      }
-    };
+  onUpload(event: UploadParams) {
+    console.log(`onUpload`);
+    console.log(event);
   }
-
-  onRecordChange(record: ScalarDictionaryWithCustom, index: number): IDataHookResponse | Promise<IDataHookResponse> {
-    return {
-      email: {
-        value: record.email + '#',
-        info: [{ message: 'added # on change', level: 'warning' }]
-      }
-    };
+  onLaunch(event: LaunchParams) {
+    console.log(`onLaunch`);
+    console.log(event);
   }
-
-  /*
-   * @Output() handlers
-   */
-  onCancel(): void {
-    console.log('canceled!');
+  onClose() {
+    console.log(`onClose`);
   }
+  onComplete(event: CompleteParams) {
+    console.log(`onComplete`);
+    console.log(event);
+
+    this.results = event.data;
+  }
+  onError(event: ErrorParams) {
+    console.log(`onError`);
+    console.log(event);
+  }
+  
 }
 ```
 
 #### Styling the component
 
-Note that in order to style this child-component (from the parent), simply supply a `class=""` to the `<flatfile-button class="some_class_name">`, and ensure that your parent component has `encapsulation` set to `ViewEncapsulation.None` (showcased above in this advanced demo).
+As mentioned above, note that in order to style this child-component (from the parent), simply supply a `class=""` to the `<flatfile-button class="some_class_name">`, and ensure that your parent component has `encapsulation` set to `ViewEncapsulation.None` (showcased above in this advanced demo). 
 
----
+Then you can style it with css via:
 
-| **<u>flatfile-button options</u>**                                                                                         | **<u>Info</u>**               | <u>**Example**</u>                     |
-| ----------------------------------------------------------------------------------------------------------------------- | ----------------------------- | -------------------------------------- |
-| `settings` - This is where you will pass your [Flatfile settings/options](https://developers.flatfile.io/docs/options). | **Required. ** <br />_object_ | `settings={{ `<br /> `type: "Customers", fields: [` <br /> `{key: "name", label: "Name"}, {key: "email", label: "Email"}`<br />`]}}` |
-|`customer` - Refers to the _[setCustomer function](https://developers.flatfile.io/docs/sdk/classes/flatfileimporter#setcustomer)_. | **Required**. <br /> _object_ - [_CustomerObject_](https://developers.flatfile.io/docs/sdk/interfaces/customerobject) | `customer={{` <br />`usedId: "1234",`<br />`companyId: "12",`<br />` companyName: "ABC",`<br />`email: "john@doe.com",`<br />`name: "John Doe"`<br />`}}`|
-|`licenseKey` - Your Flatfile license key can be found in your dashboard when you [login here](https://app.flatfile.io/login).|**Required**. <br /> _string_ | `licenseKey= 'ah12-alksjs2738-shdkaj123'` |
-|`onCancel` - An optional callback for handling a user cancelling.|Optional. <br /> _function - callback_| `onCancel () { // do something }`|
-|`onData`- An optional way to use [FlatfileResults](https://developers.flatfile.io/docs/sdk/classes/flatfileresults) to return a new Promise.|Optional. <br />_function_| `onData(results: FlatfileResults): Promise<string> { }`|
-|`onRecordChange`- An optional way to use [registerRecordHook](https://developers.flatfile.io/docs/datahooks#record-hooks-row-hooks) when a record changes.| Optional. <br /> _function_ |`onRecordChange(record: ScalarDictionaryWithCustom, index: number): IDataHookResponse | Promise<IDataHookResponse> { }`|_`onRecordInit={(data, index) => `[`IDataHookResponse`](https://developers.flatfile.io/docs/sdk/interfaces/idatahookresponse) &#124; `Promise<`[`IDataHookResponse`](https://developers.flatfile.io/docs/sdk/interfaces/idatahookresponse)`>}`_|
-|`fieldHooks`- An optional way to pass in one or more callback functions to use with [registerFieldHook](https://developers.flatfile.io/docs/datahooks#field-hooks-column-hooks).|Optional. <br />object function(s) - callback(s)|`fieldHooks: Record<string, FieldHookCallback> = { /* object */ }`|
+```css
+.some_class_name button { 
+  /* my styles */ 
+  background: #000;
+  border: 0;
+  color: #fff;
+}
+```
 
 ---
 
@@ -211,7 +236,9 @@ npm i && npm start
 
 The same application will be fired up at `http://localhost:4200`.
 
-> Ensure that you've entered in a valid licenseKey in the `AppComponent` file (`projects/sample/app.component.ts`).
+> Ensure that you've entered in a valid `token` in the `AppComponent` file (`projects/sample/app.component.ts`).
+
+---
 
 ### Publishing
 

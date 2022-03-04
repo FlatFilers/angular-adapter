@@ -8,15 +8,8 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import FlatfileImporter, {
-  FieldHookCallback,
-  CustomerObject as FlatfileCustomer,
-  LoadOptionsObject,
-  FlatfileResults,
-} from '@flatfile/adapter';
 
-import { RecordInitOrChangeCallback } from './interfaces/general';
-import { FlatfileSettings } from './interfaces/settings';
+import { flatfileImporter, IEvents, IFlatfileImporter } from '@flatfile/sdk';
 
 @Component({
   selector: 'flatfile-button',
@@ -42,60 +35,47 @@ import { FlatfileSettings } from './interfaces/settings';
   ],
 })
 export class FlatfileButtonComponent implements OnInit, OnDestroy {
-  @Input() settings: FlatfileSettings;
-  @Input() licenseKey: string;
-  @Input() customer: FlatfileCustomer;
-  @Input() fieldHooks?: Record<string, FieldHookCallback>;
+  @Input() token: string;
   @Input() mountUrl?: string;
-  @Input() onData?: (results: FlatfileResults) => Promise<string | void>;
-  @Input() onRecordInit?: RecordInitOrChangeCallback;
-  @Input() onRecordChange?: RecordInitOrChangeCallback;
-  @Input() source?: LoadOptionsObject['source'];
-
-  @Output() cancel?: EventEmitter<void> = new EventEmitter<void>();
+  @Input() apiUrl?: string;
+  @Output() onInit = new EventEmitter<IEvents['init']>();
+  @Output() onUpload = new EventEmitter<IEvents['upload']>();
+  @Output() onLaunch = new EventEmitter<IEvents['launch']>();
+  @Output() onClose = new EventEmitter<IEvents['close']>();
+  @Output() onComplete = new EventEmitter<IEvents['complete']>();
+  @Output() onError = new EventEmitter<IEvents['error']>();
 
   @ViewChild('ref', { read: ElementRef, static: true }) ref: ElementRef;
 
   isImporterLoaded: boolean = true;
 
-  private flatfileImporter: FlatfileImporter;
+  private flatfileImporter: IFlatfileImporter;
 
   public ngOnInit(): void {
-    this.validateInputs();
-
-    if (this.mountUrl) {
-      FlatfileImporter.setMountUrl(this.mountUrl);
+    if (!this.token) {
+      console.error(
+        '📥 Flatfile Importer ERROR - "token" missing via @Input()'
+      );
+      this.isImporterLoaded = false;
+      return;
     }
 
-    this.flatfileImporter = new FlatfileImporter(
-      this.licenseKey,
-      this.settings,
-      this.customer
-    );
+    if (typeof flatfileImporter === 'undefined') {
+      console.log('📥 Flatfile Importer ERROR - importer failed to load');
+      this.isImporterLoaded = false;
+      return;
+    }
 
-    this.flatfileImporter.registerNetworkErrorCallback((res) => {
-      console.error(`[Error] Flatfile Angular Adapter - Network Error`);
+    this.flatfileImporter = flatfileImporter(this.token, {
+      ...(this.mountUrl ? { mountUrl: this.mountUrl } : {}),
+      ...(this.apiUrl ? { apiUrl: this.apiUrl } : {}),
     });
 
-    if (this.fieldHooks) {
-      for (const key in this.fieldHooks) {
-        if (key) {
-          this.flatfileImporter.registerFieldHook(key, this.fieldHooks[key]);
-        }
-      }
-    }
-    if (this.onRecordChange || this.onRecordInit) {
-      this.flatfileImporter.registerRecordHook(
-        async (record: any, index: number, eventType: string) => {
-          if (eventType === 'init' && this.onRecordInit) {
-            return await this.onRecordInit(record, index);
-          }
-          if (eventType === 'change' && this.onRecordChange) {
-            return await this.onRecordChange(record, index);
-          }
-        }
-      );
-    }
+    this.flatfileImporter.on('init', (res) => this.onInit.next(res));
+    this.flatfileImporter.on('upload', (res) => this.onUpload.next(res));
+    this.flatfileImporter.on('launch', (res) => this.onLaunch.next(res));
+    this.flatfileImporter.on('close', (res) => this.onClose.next(res));
+    this.flatfileImporter.on('complete', (res) => this.onComplete.next(res));
   }
 
   public ngOnDestroy(): void {
@@ -103,55 +83,8 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
   }
 
   public launch(): void {
-    const dataHandler = (results: FlatfileResults) => {
-      this.flatfileImporter?.displayLoader();
-
-      if (this.onData) {
-        this.onData(results).then(
-          (optionalMessage?: string | void) => {
-            this.flatfileImporter?.displaySuccess(
-              optionalMessage || 'Success!'
-            );
-          },
-          (error: any) => {
-            console.error(`Flatfile Error : ${error}`);
-            this.flatfileImporter
-              ?.requestCorrectionsFromUser(
-                error instanceof Error ? error.message : error
-              )
-              .then(dataHandler, () => this.cancel.next());
-          }
-        );
-      } else {
-        this.flatfileImporter?.displaySuccess('Success!');
-      }
-    };
-
-    if (!this.flatfileImporter) {
-      this.isImporterLoaded = false;
-      console.error('[Error] Flatfile Angular Adapter - Failed to initialize');
-      return;
-    }
-    const loadOptions: LoadOptionsObject | undefined = this.source
-      ? { source: this.source }
-      : undefined;
-    this.flatfileImporter
-      .requestDataFromUser(loadOptions)
-      .then(dataHandler, () => this.cancel.next());
-  }
-
-  private validateInputs(): void {
-    if (!this.licenseKey) {
-      console.error(
-        '[Error] Flatfile Angular Adapter - licenseKey not provided!'
-      );
-      this.isImporterLoaded = false;
-    }
-    if (!this.customer?.userId) {
-      console.error(
-        '[Error] Flatfile Angular Adapter - customer userId not provided!'
-      );
-      this.isImporterLoaded = false;
-    }
+    this.flatfileImporter.launch().catch((e: Error) => {
+      this.onError.next({ error: e });
+    });
   }
 }

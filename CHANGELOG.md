@@ -1,5 +1,27 @@
 # Changelog
 
+### 3.1.0
+
+Update to the latest version of `@flatfile/sdk` (1.0.5), which adds `mountUrl` and `apiUrl` support.
+
+Now available as _optional_ `@Input()`'s (both are of type String)
+
+```html
+  <flatfile-button [token]="token"
+    [mountUrl]="mountUrl"
+    [apiUrl]="apiUrl">
+    Upload to Flafile
+  </flatfile-button>
+```
+
+### 3.0.0
+This release utilizes the new flatfile/sdk which has numerous breaking changes.
+Read through the documentation (readme) and sample code provided here to see how you can upgrade your existing flatfile-button to this latest SDK.
+
+The only thing **REQUIRED** now for `<flatfile-button>` is the Input **`[token]`**, which you must retrieve from your backend.
+
+**More information [here](https://flatfile.com/docs/implementing-embeds/)**
+
 ### 1.2.9
 Minor release to bump base adapter version to fix minor bug there.
 

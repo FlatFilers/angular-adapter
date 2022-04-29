@@ -82,7 +82,8 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
     try {
       this.flatfileImporter?.close();
     } catch {
-      // do nothing to prevent any errors
+      // If the Importer has yet to be opened, calling `close` will throw an error,
+      // which can cause things like route changes to break.
     }
   }
 

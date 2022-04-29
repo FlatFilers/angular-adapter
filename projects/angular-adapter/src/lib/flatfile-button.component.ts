@@ -79,7 +79,11 @@ export class FlatfileButtonComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.flatfileImporter.close();
+    try {
+      this.flatfileImporter?.close();
+    } catch {
+      // do nothing to prevent any errors
+    }
   }
 
   public launch(): void {

@@ -14,7 +14,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "precommit": "ng build"
   },
   "private": true,
   "dependencies": {

@@ -67,7 +67,7 @@ export interface FlatfileSettings {
     | IDictionary<{
         otherLocales: string[];
         setLanguage: string | undefined;
-        overrides: IDictionary<string>;
+        overrides: IDictionary<string | IDictionary<string>>;
       }>;
 
   /**
